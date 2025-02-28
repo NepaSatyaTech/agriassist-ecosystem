@@ -8,18 +8,17 @@ import SeedRecommendation from '@/components/SeedRecommendation';
 import IoTSensorCard from '@/components/IoTSensorCard';
 import { Button } from '@/components/ui/button';
 import { 
-  Seed, 
+  Leaf, 
   BarChart3, 
   Brain, 
   Wifi, 
   Cloud, 
-  Flask, 
+  Microscope, 
   LineChart, 
   Bell, 
   Bug, 
   Satellite, 
   MessagesSquare,
-  MicroscopeIcon,
   ArrowRight
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
@@ -88,7 +87,7 @@ const Index = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             <Link to="/seed-guide">
               <FeatureCard 
-                icon={Seed}
+                icon={Leaf}
                 title="Seasonal Seed Guide"
                 description="Get AI-powered recommendations for the best seeds based on your location, soil type, and current season."
                 iconClassName="bg-green-100 text-green-600 dark:bg-green-900/30 dark:text-green-400"
@@ -130,7 +129,7 @@ const Index = () => {
             </Link>
             
             <FeatureCard 
-              icon={Flask}
+              icon={Microscope}
               title="Soil Health Analyzer"
               description="Input soil test results and receive AI-based recommendations for improving soil health."
               iconClassName="bg-amber-100 text-amber-600 dark:bg-amber-900/30 dark:text-amber-400"

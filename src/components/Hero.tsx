@@ -35,7 +35,7 @@ const Hero = () => {
       <div className="absolute -bottom-10 -right-10 w-72 h-72 bg-sky-200 dark:bg-sky-900/20 rounded-full mix-blend-multiply filter blur-3xl opacity-50 animate-blob animation-delay-2000"></div>
       <div className="absolute top-1/3 left-1/3 w-72 h-72 bg-earth-200 dark:bg-earth-900/20 rounded-full mix-blend-multiply filter blur-3xl opacity-50 animate-blob animation-delay-4000"></div>
 
-      <style jsx>{`
+      <style>{`
         @keyframes blob {
           0% {
             transform: translate(0px, 0px) scale(1);
