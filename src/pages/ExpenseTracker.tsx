@@ -1,4 +1,3 @@
-
 import React from 'react';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
@@ -12,9 +11,9 @@ const ExpenseTracker = () => {
     <div className="min-h-screen flex flex-col">
       <Navbar />
       
-      <main className="flex-grow pt-24 pb-16">
+      <main className="flex-grow pt-16 pb-16">
         <div className="container mx-auto px-4">
-          <div className="max-w-4xl mx-auto mb-12 text-center">
+          <div className="max-w-4xl mx-auto mb-8 text-center">
             <div className="inline-flex items-center gap-2 bg-earth-100 dark:bg-earth-900/30 rounded-full px-3 py-1 text-sm font-medium text-earth-800 dark:text-earth-300 mb-3">
               <BarChart3 className="h-4 w-4" />
               <span>Financial Management</span>
@@ -27,7 +26,7 @@ const ExpenseTracker = () => {
           
           <div className="max-w-6xl mx-auto">
             {/* Dashboard Overview */}
-            <div className="mb-12">
+            <div className="mb-8">
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
                 <div className="glass-card p-6">
                   <div className="flex items-center justify-between mb-4">
@@ -36,7 +35,7 @@ const ExpenseTracker = () => {
                       <DollarSign className="h-5 w-5 text-red-600 dark:text-red-400" />
                     </div>
                   </div>
-                  <div className="text-3xl font-bold">$24,518.35</div>
+                  <div className="text-3xl font-bold">₹24,518.35</div>
                   <div className="text-sm text-red-600 dark:text-red-400 mt-2">+8.5% from last month</div>
                 </div>
                 
@@ -47,7 +46,7 @@ const ExpenseTracker = () => {
                       <DollarSign className="h-5 w-5 text-green-600 dark:text-green-400" />
                     </div>
                   </div>
-                  <div className="text-3xl font-bold">$63,102.50</div>
+                  <div className="text-3xl font-bold">₹63,102.50</div>
                   <div className="text-sm text-green-600 dark:text-green-400 mt-2">+12.3% from last month</div>
                 </div>
                 
@@ -58,7 +57,7 @@ const ExpenseTracker = () => {
                       <TrendingUp className="h-5 w-5 text-blue-600 dark:text-blue-400" />
                     </div>
                   </div>
-                  <div className="text-3xl font-bold">$38,584.15</div>
+                  <div className="text-3xl font-bold">₹38,584.15</div>
                   <div className="text-sm text-blue-600 dark:text-blue-400 mt-2">+14.7% from last month</div>
                 </div>
                 
@@ -86,16 +85,8 @@ const ExpenseTracker = () => {
                 
                 <TabsContent value="expenses">
                   <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                    <div className="lg:col-span-2 glass-card p-6">
-                      <div className="flex justify-between items-center mb-6">
-                        <h3 className="text-lg font-medium">Expense Breakdown</h3>
-                        <Button variant="outline" size="sm">
-                          <Download className="mr-2 h-4 w-4" /> Export
-                        </Button>
-                      </div>
-                      <div className="h-80">
-                        <ExpenseChart />
-                      </div>
+                    <div className="lg:col-span-2">
+                      <ExpenseChart />
                     </div>
                     
                     <div className="glass-card p-6">
@@ -104,7 +95,7 @@ const ExpenseTracker = () => {
                         <div>
                           <div className="flex justify-between mb-1">
                             <span className="text-sm font-medium">Seeds & Planting</span>
-                            <span className="text-sm font-medium">$6,542.50</span>
+                            <span className="text-sm font-medium">₹6,542.50</span>
                           </div>
                           <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2.5">
                             <div className="bg-green-600 h-2.5 rounded-full" style={{ width: '28%' }}></div>
@@ -115,7 +106,7 @@ const ExpenseTracker = () => {
                         <div>
                           <div className="flex justify-between mb-1">
                             <span className="text-sm font-medium">Fertilizers</span>
-                            <span className="text-sm font-medium">$5,128.30</span>
+                            <span className="text-sm font-medium">₹5,128.30</span>
                           </div>
                           <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2.5">
                             <div className="bg-blue-600 h-2.5 rounded-full" style={{ width: '21%' }}></div>
@@ -126,7 +117,7 @@ const ExpenseTracker = () => {
                         <div>
                           <div className="flex justify-between mb-1">
                             <span className="text-sm font-medium">Equipment</span>
-                            <span className="text-sm font-medium">$4,805.15</span>
+                            <span className="text-sm font-medium">₹4,805.15</span>
                           </div>
                           <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2.5">
                             <div className="bg-yellow-600 h-2.5 rounded-full" style={{ width: '19%' }}></div>
@@ -137,7 +128,7 @@ const ExpenseTracker = () => {
                         <div>
                           <div className="flex justify-between mb-1">
                             <span className="text-sm font-medium">Labor</span>
-                            <span className="text-sm font-medium">$3,950.80</span>
+                            <span className="text-sm font-medium">₹3,950.80</span>
                           </div>
                           <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2.5">
                             <div className="bg-red-600 h-2.5 rounded-full" style={{ width: '16%' }}></div>
@@ -148,7 +139,7 @@ const ExpenseTracker = () => {
                         <div>
                           <div className="flex justify-between mb-1">
                             <span className="text-sm font-medium">Others</span>
-                            <span className="text-sm font-medium">$4,091.60</span>
+                            <span className="text-sm font-medium">₹4,091.60</span>
                           </div>
                           <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2.5">
                             <div className="bg-purple-600 h-2.5 rounded-full" style={{ width: '16%' }}></div>

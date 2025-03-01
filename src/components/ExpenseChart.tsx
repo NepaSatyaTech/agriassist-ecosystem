@@ -42,6 +42,11 @@ const categoryData = [
 const ExpenseChart = () => {
   const [chartType, setChartType] = useState<'bar' | 'pie'>('bar');
 
+  // Format number as rupees
+  const formatRupees = (value: number) => {
+    return `₹${value.toLocaleString('en-IN')}`;
+  };
+
   return (
     <div className="glass-card p-6 h-full">
       <div className="flex justify-between items-center mb-6">
@@ -73,8 +78,9 @@ const ExpenseChart = () => {
             >
               <CartesianGrid strokeDasharray="3 3" opacity={0.1} />
               <XAxis dataKey="name" />
-              <YAxis />
+              <YAxis tickFormatter={(value) => `₹${value}`} />
               <Tooltip 
+                formatter={(value) => [`₹${value.toLocaleString('en-IN')}`, 'Amount']}
                 contentStyle={{ 
                   backgroundColor: 'rgba(255, 255, 255, 0.9)', 
                   borderRadius: '0.5rem',
@@ -105,7 +111,7 @@ const ExpenseChart = () => {
                 ))}
               </Pie>
               <Tooltip 
-                formatter={(value) => [`$${value}`, 'Amount']}
+                formatter={(value) => [`₹${value.toLocaleString('en-IN')}`, 'Amount']}
                 contentStyle={{ 
                   backgroundColor: 'rgba(255, 255, 255, 0.9)', 
                   borderRadius: '0.5rem',
@@ -122,15 +128,15 @@ const ExpenseChart = () => {
       <div className="flex justify-between items-center mt-6 pt-4 border-t border-gray-100 dark:border-gray-800">
         <div>
           <p className="text-sm text-gray-500 dark:text-gray-400">Total Income</p>
-          <p className="text-xl font-semibold text-green-600">$24,400</p>
+          <p className="text-xl font-semibold text-green-600">{formatRupees(24400)}</p>
         </div>
         <div>
           <p className="text-sm text-gray-500 dark:text-gray-400">Total Expenses</p>
-          <p className="text-xl font-semibold text-red-500">$16,700</p>
+          <p className="text-xl font-semibold text-red-500">{formatRupees(16700)}</p>
         </div>
         <div>
           <p className="text-sm text-gray-500 dark:text-gray-400">Net Profit</p>
-          <p className="text-xl font-semibold text-primary">$7,700</p>
+          <p className="text-xl font-semibold text-primary">{formatRupees(7700)}</p>
         </div>
       </div>
     </div>

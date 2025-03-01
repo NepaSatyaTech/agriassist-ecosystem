@@ -1,5 +1,5 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import WeatherWidget from '@/components/WeatherWidget';
@@ -10,63 +10,189 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Cloud, Search, Calendar, MapPin, ArrowRight } from 'lucide-react';
 
 const Weather = () => {
-  // Sample weather data
-  const currentWeather = {
-    location: 'Agritown, CA',
-    date: 'Today, June 10',
-    temperature: 28,
-    weatherType: 'sunny' as const,
-    humidity: 35,
-    windSpeed: 8,
-    precipitation: 0,
-  };
-  
-  const forecastData = [
-    {
-      location: 'Agritown, CA',
-      date: 'Tomorrow, June 11',
-      temperature: 30,
-      weatherType: 'sunny' as const,
-      humidity: 40,
-      windSpeed: 10,
-      precipitation: 0,
+  const [searchLocation, setSearchLocation] = useState('Agritown, CA');
+  const [currentLocation, setCurrentLocation] = useState('Agritown, CA');
+  // Sample weather data for different locations
+  const weatherData = {
+    'Agritown, CA': {
+      current: {
+        location: 'Agritown, CA',
+        date: 'Today, June 10',
+        temperature: 28,
+        weatherType: 'sunny' as const,
+        humidity: 35,
+        windSpeed: 8,
+        precipitation: 0,
+      },
+      forecast: [
+        {
+          location: 'Agritown, CA',
+          date: 'Tomorrow, June 11',
+          temperature: 30,
+          weatherType: 'sunny' as const,
+          humidity: 40,
+          windSpeed: 10,
+          precipitation: 0,
+        },
+        {
+          location: 'Agritown, CA',
+          date: 'Wednesday, June 12',
+          temperature: 24,
+          weatherType: 'cloudy' as const,
+          humidity: 55,
+          windSpeed: 12,
+          precipitation: 0,
+        },
+        {
+          location: 'Agritown, CA',
+          date: 'Thursday, June 13',
+          temperature: 22,
+          weatherType: 'rainy' as const,
+          humidity: 75,
+          windSpeed: 15,
+          precipitation: 8.5,
+        },
+        {
+          location: 'Agritown, CA',
+          date: 'Friday, June 14',
+          temperature: 25,
+          weatherType: 'cloudy' as const,
+          humidity: 60,
+          windSpeed: 8,
+          precipitation: 0,
+        }
+      ]
     },
-    {
-      location: 'Agritown, CA',
-      date: 'Wednesday, June 12',
-      temperature: 24,
-      weatherType: 'cloudy' as const,
-      humidity: 55,
-      windSpeed: 12,
-      precipitation: 0,
+    'Mumbai, India': {
+      current: {
+        location: 'Mumbai, India',
+        date: 'Today, June 10',
+        temperature: 32,
+        weatherType: 'rainy' as const,
+        humidity: 80,
+        windSpeed: 12,
+        precipitation: 15,
+      },
+      forecast: [
+        {
+          location: 'Mumbai, India',
+          date: 'Tomorrow, June 11',
+          temperature: 31,
+          weatherType: 'rainy' as const,
+          humidity: 85,
+          windSpeed: 14,
+          precipitation: 25,
+        },
+        {
+          location: 'Mumbai, India',
+          date: 'Wednesday, June 12',
+          temperature: 30,
+          weatherType: 'drizzle' as const,
+          humidity: 75,
+          windSpeed: 10,
+          precipitation: 5,
+        },
+        {
+          location: 'Mumbai, India',
+          date: 'Thursday, June 13',
+          temperature: 31,
+          weatherType: 'cloudy' as const,
+          humidity: 70,
+          windSpeed: 8,
+          precipitation: 0,
+        },
+        {
+          location: 'Mumbai, India',
+          date: 'Friday, June 14',
+          temperature: 33,
+          weatherType: 'cloudy' as const,
+          humidity: 65,
+          windSpeed: 6,
+          precipitation: 0,
+        }
+      ]
     },
-    {
-      location: 'Agritown, CA',
-      date: 'Thursday, June 13',
-      temperature: 22,
-      weatherType: 'rainy' as const,
-      humidity: 75,
-      windSpeed: 15,
-      precipitation: 8.5,
-    },
-    {
-      location: 'Agritown, CA',
-      date: 'Friday, June 14',
-      temperature: 25,
-      weatherType: 'cloudy' as const,
-      humidity: 60,
-      windSpeed: 8,
-      precipitation: 0,
+    'Delhi, India': {
+      current: {
+        location: 'Delhi, India',
+        date: 'Today, June 10',
+        temperature: 38,
+        weatherType: 'sunny' as const,
+        humidity: 45,
+        windSpeed: 5,
+        precipitation: 0,
+      },
+      forecast: [
+        {
+          location: 'Delhi, India',
+          date: 'Tomorrow, June 11',
+          temperature: 39,
+          weatherType: 'sunny' as const,
+          humidity: 40,
+          windSpeed: 6,
+          precipitation: 0,
+        },
+        {
+          location: 'Delhi, India',
+          date: 'Wednesday, June 12',
+          temperature: 40,
+          weatherType: 'sunny' as const,
+          humidity: 35,
+          windSpeed: 7,
+          precipitation: 0,
+        },
+        {
+          location: 'Delhi, India',
+          date: 'Thursday, June 13',
+          temperature: 37,
+          weatherType: 'cloudy' as const,
+          humidity: 50,
+          windSpeed: 10,
+          precipitation: 0,
+        },
+        {
+          location: 'Delhi, India',
+          date: 'Friday, June 14',
+          temperature: 36,
+          weatherType: 'cloudy' as const,
+          humidity: 55,
+          windSpeed: 8,
+          precipitation: 2,
+        }
+      ]
     }
-  ];
+  };
+
+  // Get current weather data based on selected location
+  const getCurrentWeather = () => {
+    return weatherData[currentLocation]?.current || weatherData['Agritown, CA'].current;
+  };
+
+  // Get forecast data based on selected location
+  const getForecastData = () => {
+    return weatherData[currentLocation]?.forecast || weatherData['Agritown, CA'].forecast;
+  };
+
+  // Handle search button click
+  const handleSearch = () => {
+    // Check if the searched location exists in our mock data
+    if (weatherData[searchLocation]) {
+      setCurrentLocation(searchLocation);
+    } else {
+      // For demo purposes, we'll just show a console message
+      // In a real app, this would connect to a weather API
+      console.log(`Weather data for ${searchLocation} not found. Using default location.`);
+      setCurrentLocation('Agritown, CA');
+    }
+  };
 
   return (
     <div className="min-h-screen flex flex-col">
       <Navbar />
       
-      <main className="flex-grow pt-24 pb-16">
+      <main className="flex-grow pt-16 pb-16">
         <div className="container mx-auto px-4">
-          <div className="max-w-4xl mx-auto mb-12 text-center">
+          <div className="max-w-4xl mx-auto mb-8 text-center">
             <div className="inline-flex items-center gap-2 bg-blue-100 dark:bg-blue-900/30 rounded-full px-3 py-1 text-sm font-medium text-blue-800 dark:text-blue-300 mb-3">
               <Cloud className="h-4 w-4" />
               <span>Weather Intelligence</span>
@@ -86,10 +212,17 @@ const Weather = () => {
                   type="text"
                   placeholder="Enter location..."
                   className="pl-10"
-                  defaultValue="Agritown, CA"
+                  value={searchLocation}
+                  onChange={(e) => setSearchLocation(e.target.value)}
+                  list="locationOptions"
                 />
+                <datalist id="locationOptions">
+                  <option value="Agritown, CA" />
+                  <option value="Mumbai, India" />
+                  <option value="Delhi, India" />
+                </datalist>
               </div>
-              <Button>
+              <Button onClick={handleSearch}>
                 <Search className="mr-2 h-4 w-4" /> Get Weather
               </Button>
             </div>
@@ -105,15 +238,15 @@ const Weather = () => {
               <TabsContent value="current">
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
                   <div className="md:col-span-1">
-                    <WeatherWidget data={currentWeather} />
+                    <WeatherWidget data={getCurrentWeather()} />
                   </div>
                   
                   <div className="md:col-span-2 glass-card p-6">
-                    <h3 className="text-xl font-semibold mb-4">Current Conditions</h3>
+                    <h3 className="text-xl font-semibold mb-4">Current Conditions in {currentLocation}</h3>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                       <div>
                         <h4 className="text-sm font-medium text-gray-500 dark:text-gray-400 mb-1">Feels Like</h4>
-                        <p className="text-2xl font-bold">29°C</p>
+                        <p className="text-2xl font-bold">{getCurrentWeather().temperature + 1}°C</p>
                       </div>
                       
                       <div>
@@ -143,11 +276,21 @@ const Weather = () => {
                     </div>
                     
                     <div className="mt-6 pt-6 border-t border-gray-100 dark:border-gray-800">
-                      <h4 className="font-medium mb-3">Weather Alert</h4>
+                      <h4 className="font-medium mb-3">Weather Alert for {currentLocation}</h4>
                       <div className="bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-md p-3">
-                        <p className="text-sm text-yellow-800 dark:text-yellow-200">
-                          Heat advisory in effect from 11 AM to 8 PM. Take precautions to prevent heat-related illness.
-                        </p>
+                        {currentLocation.includes('Mumbai') ? (
+                          <p className="text-sm text-yellow-800 dark:text-yellow-200">
+                            Heavy rainfall warning. Potential for localized flooding in low-lying areas.
+                          </p>
+                        ) : currentLocation.includes('Delhi') ? (
+                          <p className="text-sm text-yellow-800 dark:text-yellow-200">
+                            Extreme heat warning. Take precautions to prevent heat-related illness.
+                          </p>
+                        ) : (
+                          <p className="text-sm text-yellow-800 dark:text-yellow-200">
+                            Heat advisory in effect from 11 AM to 8 PM. Take precautions to prevent heat-related illness.
+                          </p>
+                        )}
                       </div>
                     </div>
                   </div>
@@ -156,16 +299,19 @@ const Weather = () => {
               
               <TabsContent value="forecast">
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                  {forecastData.map((day, index) => (
+                  {getForecastData().map((day, index) => (
                     <WeatherWidget key={index} data={day} />
                   ))}
                 </div>
                 
                 <div className="glass-card p-6 mt-8">
-                  <h3 className="text-xl font-semibold mb-4">Extended Forecast</h3>
+                  <h3 className="text-xl font-semibold mb-4">Extended Forecast for {currentLocation}</h3>
                   <p className="text-gray-600 dark:text-gray-300 mb-4">
-                    The 14-day extended forecast shows a warming trend with potential showers in 7-10 days.
-                    This pattern is favorable for current growing conditions but may require irrigation adjustments.
+                    {currentLocation.includes('Mumbai') ? 
+                      "The 14-day extended forecast shows continued monsoon conditions with heavy rainfall expected throughout the period." :
+                      currentLocation.includes('Delhi') ? 
+                      "The 14-day extended forecast shows high temperatures continuing with a brief cooling period expected in 10-12 days." :
+                      "The 14-day extended forecast shows a warming trend with potential showers in 7-10 days."}
                   </p>
                   <Button variant="outline">
                     View 14-Day Forecast <ArrowRight className="ml-2 h-4 w-4" />
