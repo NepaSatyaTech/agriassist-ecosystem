@@ -9,15 +9,18 @@ import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 import { useToast } from '@/hooks/use-toast';
 
 const Navbar = () => {
-  const { setTheme, theme } = useTheme();
+  const { setTheme, theme, resolvedTheme } = useTheme();
   const [isScrolled, setIsScrolled] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [user, setUser] = useState<{ email: string } | null>(null);
+  const [mounted, setMounted] = useState(false);
   const navigate = useNavigate();
   const { toast } = useToast();
 
   // Check authentication on mount
   useEffect(() => {
+    setMounted(true);
+    
     const authStatus = localStorage.getItem('isAuthenticated') === 'true';
     setIsAuthenticated(authStatus);
     
@@ -46,6 +49,12 @@ const Navbar = () => {
       description: "You have been successfully logged out.",
     });
     navigate('/');
+  };
+
+  // Handle theme toggle
+  const toggleTheme = () => {
+    const currentTheme = resolvedTheme || theme;
+    setTheme(currentTheme === 'dark' ? 'light' : 'dark');
   };
 
   return (
@@ -90,9 +99,6 @@ const Navbar = () => {
               </div>
             </div>
           </div>
-          <Link to="/about" className="text-sm font-medium hover:text-primary transition-colors">
-            About
-          </Link>
           <Link to="/contact" className="text-sm font-medium hover:text-primary transition-colors">
             Contact
           </Link>
@@ -100,16 +106,19 @@ const Navbar = () => {
         
         {/* Action Buttons */}
         <div className="hidden md:flex items-center gap-2">
-          <Button 
-            variant="ghost" 
-            size="icon" 
-            onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
-            className="rounded-full"
-          >
-            <Sun className="h-5 w-5 rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
-            <Moon className="absolute h-5 w-5 rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
-            <span className="sr-only">Toggle theme</span>
-          </Button>
+          {mounted && (
+            <Button 
+              variant="ghost" 
+              size="icon" 
+              onClick={toggleTheme}
+              className="rounded-full"
+              aria-label={resolvedTheme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
+            >
+              <Sun className="h-5 w-5 rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
+              <Moon className="absolute h-5 w-5 rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
+              <span className="sr-only">Toggle theme</span>
+            </Button>
+          )}
           
           {isAuthenticated ? (
             <div className="flex items-center gap-2">
@@ -172,9 +181,6 @@ const Navbar = () => {
                     </Link>
                   </div>
                 </details>
-                <Link to="/about" className="px-4 py-2 text-sm font-medium hover:bg-gray-100 dark:hover:bg-gray-800 rounded-md">
-                  About
-                </Link>
                 <Link to="/contact" className="px-4 py-2 text-sm font-medium hover:bg-gray-100 dark:hover:bg-gray-800 rounded-md">
                   Contact
                 </Link>
@@ -183,16 +189,18 @@ const Navbar = () => {
               <div className="mt-auto p-4 border-t">
                 <div className="flex items-center justify-between mb-4">
                   <span className="text-sm font-medium">Switch Theme</span>
-                  <Button 
-                    variant="ghost" 
-                    size="icon" 
-                    onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
-                    className="rounded-full"
-                  >
-                    <Sun className="h-5 w-5 rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
-                    <Moon className="absolute h-5 w-5 rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
-                    <span className="sr-only">Toggle theme</span>
-                  </Button>
+                  {mounted && (
+                    <Button 
+                      variant="ghost" 
+                      size="icon" 
+                      onClick={toggleTheme}
+                      className="rounded-full"
+                    >
+                      <Sun className="h-5 w-5 rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
+                      <Moon className="absolute h-5 w-5 rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
+                      <span className="sr-only">Toggle theme</span>
+                    </Button>
+                  )}
                 </div>
                 
                 {isAuthenticated ? (

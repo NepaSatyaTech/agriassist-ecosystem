@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import SeedRecommendation from '@/components/SeedRecommendation';
+import SeedQuantityCalculator from '@/components/SeedQuantityCalculator';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
@@ -151,8 +152,9 @@ const SeedGuide = () => {
           
           <div className="max-w-6xl mx-auto">
             <Tabs defaultValue="recommendations" className="mb-12">
-              <TabsList className="w-full max-w-md mx-auto grid grid-cols-2 mb-8">
+              <TabsList className="w-full max-w-md mx-auto grid grid-cols-3 mb-8">
                 <TabsTrigger value="recommendations">Recommendations</TabsTrigger>
+                <TabsTrigger value="calculator">Seed Calculator</TabsTrigger>
                 <TabsTrigger value="catalog">Full Catalog</TabsTrigger>
               </TabsList>
               
@@ -240,6 +242,37 @@ const SeedGuide = () => {
                     </Button>
                   </div>
                 )}
+              </TabsContent>
+              
+              <TabsContent value="calculator">
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                  <SeedQuantityCalculator />
+                  
+                  <div className="glass-card p-6">
+                    <h3 className="text-lg font-semibold mb-4">Seed Planting Guidelines</h3>
+                    <div className="space-y-4">
+                      <div>
+                        <h4 className="font-medium mb-2">Planting Depth</h4>
+                        <p className="text-sm">A general rule is to plant seeds at a depth that is 2-3 times their diameter. Larger seeds like corn should be planted deeper (1-2 inches) than smaller seeds like lettuce (¼ inch).</p>
+                      </div>
+                      
+                      <div>
+                        <h4 className="font-medium mb-2">Seed Spacing</h4>
+                        <p className="text-sm">Proper spacing ensures plants have enough room to grow. Follow the recommended spacing on the seed packet or use our calculator for common crops.</p>
+                      </div>
+                      
+                      <div>
+                        <h4 className="font-medium mb-2">Seed Quality Considerations</h4>
+                        <ul className="text-sm list-disc list-inside space-y-1">
+                          <li>Germination rate: Adjust quantities for seeds with lower germination rates</li>
+                          <li>Seed size: Larger varieties may require different seeding rates</li>
+                          <li>Production goal: Higher density for smaller fruits, wider spacing for larger produce</li>
+                          <li>Climate conditions: Some conditions may require overseeding</li>
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </TabsContent>
               
               <TabsContent value="catalog">
