@@ -1,135 +1,223 @@
 
 import React, { useState, useEffect } from 'react';
-import { Link, useLocation } from 'react-router-dom';
-import { Menu, X, ChevronDown, Sun, Moon } from 'lucide-react';
+import { Link, useNavigate } from 'react-router-dom';
+import { ChevronDown, Sun, Moon, Menu, X, LogOut, Leaf } from 'lucide-react';
+import { useTheme } from 'next-themes';
+import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
+import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
+import { useToast } from '@/hooks/use-toast';
 
 const Navbar = () => {
-  const [isOpen, setIsOpen] = useState(false);
-  const [isDarkMode, setIsDarkMode] = useState(false);
+  const { setTheme, theme } = useTheme();
   const [isScrolled, setIsScrolled] = useState(false);
-  const location = useLocation();
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [user, setUser] = useState<{ email: string } | null>(null);
+  const navigate = useNavigate();
+  const { toast } = useToast();
+
+  // Check authentication on mount
+  useEffect(() => {
+    const authStatus = localStorage.getItem('isAuthenticated') === 'true';
+    setIsAuthenticated(authStatus);
+    
+    const userData = localStorage.getItem('user');
+    if (userData) {
+      setUser(JSON.parse(userData));
+    }
+  }, []);
 
   useEffect(() => {
     const handleScroll = () => {
-      if (window.scrollY > 10) {
-        setIsScrolled(true);
-      } else {
-        setIsScrolled(false);
-      }
+      setIsScrolled(window.scrollY > 10);
     };
-
+    
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  useEffect(() => {
-    if (isDarkMode) {
-      document.documentElement.classList.add('dark');
-    } else {
-      document.documentElement.classList.remove('dark');
-    }
-  }, [isDarkMode]);
-
-  const toggleDarkMode = () => {
-    setIsDarkMode(!isDarkMode);
+  const handleLogout = () => {
+    localStorage.removeItem('isAuthenticated');
+    localStorage.removeItem('user');
+    setIsAuthenticated(false);
+    setUser(null);
+    toast({
+      title: "Logged out",
+      description: "You have been successfully logged out.",
+    });
+    navigate('/');
   };
-
-  const isActive = (path: string) => {
-    return location.pathname === path;
-  };
-
-  const navLinks = [
-    { name: 'Home', path: '/' },
-    { name: 'Seed Guide', path: '/seed-guide' },
-    { name: 'Expense Tracker', path: '/expense-tracker' },
-    { name: 'Weather', path: '/weather' },
-    { name: 'IoT Monitoring', path: '/iot-monitoring' },
-  ];
 
   return (
-    <nav className={`fixed top-0 left-0 w-full z-50 transition-all duration-300 ${isScrolled ? 'bg-white/80 dark:bg-black/50 backdrop-blur-lg shadow-sm' : 'bg-transparent'}`}>
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-16">
-          <div className="flex items-center">
-            <Link to="/" className="flex items-center space-x-2">
-              <div className="w-10 h-10 rounded-full bg-gradient-to-r from-green-500 to-green-600 flex items-center justify-center">
-                <span className="text-white font-bold text-lg">A</span>
-              </div>
-              <span className="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-green-600 to-green-500">
-                AgriAssist
-              </span>
-            </Link>
+    <header className={cn(
+      "fixed top-0 w-full z-40 transition-all duration-200",
+      isScrolled 
+        ? "bg-white dark:bg-gray-900 shadow-md py-3" 
+        : "bg-transparent py-5"
+    )}>
+      <div className="container mx-auto px-4 flex items-center justify-between">
+        {/* Logo */}
+        <Link to="/" className="flex items-center gap-2">
+          <div className="bg-primary rounded-full p-1.5">
+            <Leaf className="h-5 w-5 text-primary-foreground" />
           </div>
-
-          <div className="hidden md:block">
-            <div className="flex items-center space-x-4">
-              {navLinks.map((link) => (
-                <Link
-                  key={link.path}
-                  to={link.path}
-                  className={`nav-link ${isActive(link.path) ? 'active-nav-link' : ''}`}
-                >
-                  {link.name}
+          <span className="font-bold text-xl">AgriAssist</span>
+        </Link>
+        
+        {/* Desktop Navigation */}
+        <nav className="hidden md:flex items-center gap-6">
+          <Link to="/" className="text-sm font-medium hover:text-primary transition-colors">
+            Home
+          </Link>
+          <Link to="/seed-guide" className="text-sm font-medium hover:text-primary transition-colors">
+            Seed Guide
+          </Link>
+          <div className="relative group">
+            <button className="flex items-center gap-1 text-sm font-medium hover:text-primary transition-colors">
+              Features <ChevronDown className="h-4 w-4" />
+            </button>
+            <div className="absolute left-0 mt-2 w-48 rounded-md shadow-lg bg-white dark:bg-gray-800 ring-1 ring-black ring-opacity-5 transition-all duration-200 opacity-0 invisible group-hover:opacity-100 group-hover:visible">
+              <div className="py-1">
+                <Link to="/expense-tracker" className="block px-4 py-2 text-sm hover:bg-gray-100 dark:hover:bg-gray-700">
+                  Expense Tracker
                 </Link>
-              ))}
+                <Link to="/iot-monitoring" className="block px-4 py-2 text-sm hover:bg-gray-100 dark:hover:bg-gray-700">
+                  IoT Monitoring
+                </Link>
+                <Link to="/weather" className="block px-4 py-2 text-sm hover:bg-gray-100 dark:hover:bg-gray-700">
+                  Weather Forecast
+                </Link>
+              </div>
             </div>
           </div>
-
-          <div className="flex items-center space-x-2">
-            <Button variant="ghost" size="icon" onClick={toggleDarkMode}>
-              {isDarkMode ? (
-                <Sun className="h-5 w-5" />
-              ) : (
-                <Moon className="h-5 w-5" />
-              )}
+          <Link to="/about" className="text-sm font-medium hover:text-primary transition-colors">
+            About
+          </Link>
+          <Link to="/contact" className="text-sm font-medium hover:text-primary transition-colors">
+            Contact
+          </Link>
+        </nav>
+        
+        {/* Action Buttons */}
+        <div className="hidden md:flex items-center gap-2">
+          <Button 
+            variant="ghost" 
+            size="icon" 
+            onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
+            className="rounded-full"
+          >
+            <Sun className="h-5 w-5 rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
+            <Moon className="absolute h-5 w-5 rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
+            <span className="sr-only">Toggle theme</span>
+          </Button>
+          
+          {isAuthenticated ? (
+            <div className="flex items-center gap-2">
+              <span className="text-sm font-medium">{user?.email}</span>
+              <Button variant="ghost" size="icon" onClick={handleLogout}>
+                <LogOut className="h-5 w-5" />
+              </Button>
+            </div>
+          ) : (
+            <>
+              <Link to="/login">
+                <Button variant="ghost">Login</Button>
+              </Link>
+              <Link to="/register">
+                <Button>Sign Up</Button>
+              </Link>
+            </>
+          )}
+        </div>
+        
+        {/* Mobile Menu */}
+        <Sheet>
+          <SheetTrigger asChild className="md:hidden">
+            <Button variant="ghost" size="icon">
+              <Menu />
+              <span className="sr-only">Toggle menu</span>
             </Button>
-
-            <Button variant="default" className="hidden md:flex">
-              Sign In
-            </Button>
-
-            <div className="md:hidden">
-              <button
-                onClick={() => setIsOpen(!isOpen)}
-                className="text-gray-700 dark:text-gray-200 hover:text-gray-900 dark:hover:text-white focus:outline-none"
-              >
-                {isOpen ? (
-                  <X className="h-6 w-6" />
+          </SheetTrigger>
+          <SheetContent side="right" className="w-[280px]">
+            <div className="flex flex-col h-full">
+              <div className="flex items-center justify-between py-4 border-b">
+                <Link to="/" className="flex items-center gap-2">
+                  <div className="bg-primary rounded-full p-1.5">
+                    <Leaf className="h-5 w-5 text-primary-foreground" />
+                  </div>
+                  <span className="font-bold text-xl">AgriAssist</span>
+                </Link>
+              </div>
+              
+              <nav className="flex flex-col gap-1 py-4">
+                <Link to="/" className="px-4 py-2 text-sm font-medium hover:bg-gray-100 dark:hover:bg-gray-800 rounded-md">
+                  Home
+                </Link>
+                <Link to="/seed-guide" className="px-4 py-2 text-sm font-medium hover:bg-gray-100 dark:hover:bg-gray-800 rounded-md">
+                  Seed Guide
+                </Link>
+                <details className="group w-full">
+                  <summary className="px-4 py-2 text-sm font-medium hover:bg-gray-100 dark:hover:bg-gray-800 rounded-md list-none flex justify-between cursor-pointer">
+                    Features <ChevronDown className="h-4 w-4" />
+                  </summary>
+                  <div className="ml-4 border-l pl-2 mt-1">
+                    <Link to="/expense-tracker" className="block px-4 py-2 text-sm hover:bg-gray-100 dark:hover:bg-gray-800 rounded-md">
+                      Expense Tracker
+                    </Link>
+                    <Link to="/iot-monitoring" className="block px-4 py-2 text-sm hover:bg-gray-100 dark:hover:bg-gray-800 rounded-md">
+                      IoT Monitoring
+                    </Link>
+                    <Link to="/weather" className="block px-4 py-2 text-sm hover:bg-gray-100 dark:hover:bg-gray-800 rounded-md">
+                      Weather Forecast
+                    </Link>
+                  </div>
+                </details>
+                <Link to="/about" className="px-4 py-2 text-sm font-medium hover:bg-gray-100 dark:hover:bg-gray-800 rounded-md">
+                  About
+                </Link>
+                <Link to="/contact" className="px-4 py-2 text-sm font-medium hover:bg-gray-100 dark:hover:bg-gray-800 rounded-md">
+                  Contact
+                </Link>
+              </nav>
+              
+              <div className="mt-auto p-4 border-t">
+                <div className="flex items-center justify-between mb-4">
+                  <span className="text-sm font-medium">Switch Theme</span>
+                  <Button 
+                    variant="ghost" 
+                    size="icon" 
+                    onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
+                    className="rounded-full"
+                  >
+                    <Sun className="h-5 w-5 rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
+                    <Moon className="absolute h-5 w-5 rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
+                    <span className="sr-only">Toggle theme</span>
+                  </Button>
+                </div>
+                
+                {isAuthenticated ? (
+                  <div className="space-y-2">
+                    <div className="text-sm font-medium">{user?.email}</div>
+                    <Button className="w-full" variant="outline" onClick={handleLogout}>
+                      <LogOut className="h-4 w-4 mr-2" /> Logout
+                    </Button>
+                  </div>
                 ) : (
-                  <Menu className="h-6 w-6" />
+                  <div className="space-y-2">
+                    <Link to="/login">
+                      <Button className="w-full" variant="outline">Login</Button>
+                    </Link>
+                    <Link to="/register">
+                      <Button className="w-full">Sign Up</Button>
+                    </Link>
+                  </div>
                 )}
-              </button>
+              </div>
             </div>
-          </div>
-        </div>
+          </SheetContent>
+        </Sheet>
       </div>
-
-      {/* Mobile menu */}
-      <div className={`md:hidden ${isOpen ? 'block' : 'hidden'}`}>
-        <div className="glass-card m-2 py-2">
-          {navLinks.map((link) => (
-            <Link
-              key={link.path}
-              to={link.path}
-              className={`block px-4 py-2 text-base font-medium ${
-                isActive(link.path) 
-                  ? 'text-primary bg-green-50 dark:bg-green-900/20' 
-                  : 'text-gray-700 dark:text-gray-200 hover:bg-green-50 dark:hover:bg-green-900/10'
-              }`}
-              onClick={() => setIsOpen(false)}
-            >
-              {link.name}
-            </Link>
-          ))}
-          <div className="px-4 py-2">
-            <Button variant="default" className="w-full">
-              Sign In
-            </Button>
-          </div>
-        </div>
-      </div>
-    </nav>
+    </header>
   );
 };
 
