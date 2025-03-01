@@ -1,5 +1,4 @@
-
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import WeatherWidget from '@/components/WeatherWidget';
@@ -8,10 +7,13 @@ import { Input } from '@/components/ui/input';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Cloud, Search, Calendar, MapPin, ArrowRight } from 'lucide-react';
+import { useToast } from '@/hooks/use-toast';
 
 const Weather = () => {
   const [searchLocation, setSearchLocation] = useState('Agritown, CA');
   const [currentLocation, setCurrentLocation] = useState('Agritown, CA');
+  const { toast } = useToast();
+  
   // Sample weather data for different locations
   const weatherData = {
     'Agritown, CA': {
@@ -160,6 +162,104 @@ const Weather = () => {
           precipitation: 2,
         }
       ]
+    },
+    'Kolkata, India': {
+      current: {
+        location: 'Kolkata, India',
+        date: 'Today, June 10',
+        temperature: 33,
+        weatherType: 'drizzle' as const,
+        humidity: 70,
+        windSpeed: 7,
+        precipitation: 4,
+      },
+      forecast: [
+        {
+          location: 'Kolkata, India',
+          date: 'Tomorrow, June 11',
+          temperature: 32,
+          weatherType: 'drizzle' as const,
+          humidity: 75,
+          windSpeed: 9,
+          precipitation: 8,
+        },
+        {
+          location: 'Kolkata, India',
+          date: 'Wednesday, June 12',
+          temperature: 31,
+          weatherType: 'rainy' as const,
+          humidity: 80,
+          windSpeed: 12,
+          precipitation: 15,
+        },
+        {
+          location: 'Kolkata, India',
+          date: 'Thursday, June 13',
+          temperature: 30,
+          weatherType: 'cloudy' as const,
+          humidity: 75,
+          windSpeed: 8,
+          precipitation: 0,
+        },
+        {
+          location: 'Kolkata, India',
+          date: 'Friday, June 14',
+          temperature: 32,
+          weatherType: 'cloudy' as const,
+          humidity: 65,
+          windSpeed: 6,
+          precipitation: 0,
+        }
+      ]
+    },
+    'Pune, India': {
+      current: {
+        location: 'Pune, India',
+        date: 'Today, June 10',
+        temperature: 29,
+        weatherType: 'cloudy' as const,
+        humidity: 60,
+        windSpeed: 8,
+        precipitation: 0,
+      },
+      forecast: [
+        {
+          location: 'Pune, India',
+          date: 'Tomorrow, June 11',
+          temperature: 30,
+          weatherType: 'rainy' as const,
+          humidity: 65,
+          windSpeed: 10,
+          precipitation: 5,
+        },
+        {
+          location: 'Pune, India',
+          date: 'Wednesday, June 12',
+          temperature: 28,
+          weatherType: 'rainy' as const,
+          humidity: 75,
+          windSpeed: 12,
+          precipitation: 10,
+        },
+        {
+          location: 'Pune, India',
+          date: 'Thursday, June 13',
+          temperature: 27,
+          weatherType: 'cloudy' as const,
+          humidity: 70,
+          windSpeed: 8,
+          precipitation: 0,
+        },
+        {
+          location: 'Pune, India',
+          date: 'Friday, June 14',
+          temperature: 29,
+          weatherType: 'sunny' as const,
+          humidity: 55,
+          windSpeed: 6,
+          precipitation: 0,
+        }
+      ]
     }
   };
 
@@ -175,14 +275,32 @@ const Weather = () => {
 
   // Handle search button click
   const handleSearch = () => {
-    // Check if the searched location exists in our mock data
-    if (weatherData[searchLocation]) {
-      setCurrentLocation(searchLocation);
+    const formattedInput = searchLocation.trim();
+    // Normalize the search input to match our data keys
+    const matchingLocation = Object.keys(weatherData).find(
+      location => location.toLowerCase() === formattedInput.toLowerCase()
+    );
+    
+    if (matchingLocation) {
+      setCurrentLocation(matchingLocation);
+      toast({
+        title: "Weather updated",
+        description: `Showing weather for ${matchingLocation}`,
+      });
     } else {
-      // For demo purposes, we'll just show a console message
-      // In a real app, this would connect to a weather API
-      console.log(`Weather data for ${searchLocation} not found. Using default location.`);
-      setCurrentLocation('Agritown, CA');
+      toast({
+        title: "Location not found",
+        description: `Weather data for "${formattedInput}" not available. Try Mumbai, Delhi, Kolkata, Pune, or Agritown, CA.`,
+        variant: "destructive"
+      });
+      // Keep the current location as is
+    }
+  };
+
+  // Add keyboard event listener for Enter key
+  const handleKeyPress = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter') {
+      handleSearch();
     }
   };
 
@@ -214,12 +332,15 @@ const Weather = () => {
                   className="pl-10"
                   value={searchLocation}
                   onChange={(e) => setSearchLocation(e.target.value)}
+                  onKeyDown={handleKeyPress}
                   list="locationOptions"
                 />
                 <datalist id="locationOptions">
                   <option value="Agritown, CA" />
                   <option value="Mumbai, India" />
                   <option value="Delhi, India" />
+                  <option value="Kolkata, India" />
+                  <option value="Pune, India" />
                 </datalist>
               </div>
               <Button onClick={handleSearch}>

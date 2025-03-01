@@ -30,8 +30,22 @@ const weatherIcons = {
 const WeatherWidget = ({ data, className }: WeatherWidgetProps) => {
   const WeatherIcon = weatherIcons[data.weatherType];
 
+  // Generate weather description based on weather type
+  const getWeatherDescription = (type: string) => {
+    switch (type) {
+      case 'sunny': return 'Clear skies';
+      case 'cloudy': return 'Partly cloudy';
+      case 'rainy': return 'Rain showers';
+      case 'snowy': return 'Snow';
+      case 'windy': return 'Windy conditions';
+      case 'stormy': return 'Thunderstorms';
+      case 'drizzle': return 'Light rain';
+      default: return 'Weather data';
+    }
+  };
+
   return (
-    <div className={`glass-card p-6 ${className}`}>
+    <div className={`glass-card p-6 shadow-sm hover:shadow-md transition-shadow ${className}`}>
       <div className="flex items-center justify-between mb-4">
         <div>
           <h3 className="text-lg font-semibold">{data.location}</h3>
@@ -42,10 +56,14 @@ const WeatherWidget = ({ data, className }: WeatherWidgetProps) => {
         </div>
       </div>
       
-      <div className="flex items-end gap-2 mb-6">
+      <div className="flex items-end gap-2 mb-2">
         <div className="text-4xl font-bold">{data.temperature}°</div>
         <div className="text-gray-500 dark:text-gray-400 ml-1 mb-1">C</div>
       </div>
+      
+      <p className="text-sm text-gray-600 dark:text-gray-300 mb-4">
+        {getWeatherDescription(data.weatherType)}
+      </p>
       
       <div className="grid grid-cols-3 gap-4">
         <div className="text-center">
