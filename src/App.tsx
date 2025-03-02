@@ -1,3 +1,4 @@
+
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import './App.css';
 import Index from './pages/Index';
@@ -12,20 +13,11 @@ import Weather from './pages/Weather';
 import { AuthProvider } from './hooks/use-auth';
 import { useEffect, useState } from 'react';
 
-const ProtectedRoute = ({ element, requiredRole }: { element: JSX.Element, requiredRole?: string }) => {
+const ProtectedRoute = ({ element }: { element: JSX.Element, requiredRole?: string }) => {
   const isAuthenticated = localStorage.getItem('isAuthenticated') === 'true';
-  const userDataStr = localStorage.getItem('user');
-  const userData = userDataStr ? JSON.parse(userDataStr) : null;
-  const userRole = userData?.role || 'client';
   
-  const hasRequiredRole = requiredRole ? userRole === requiredRole : true;
-  
-  if (isAuthenticated && hasRequiredRole) {
+  if (isAuthenticated) {
     return element;
-  }
-  
-  if (isAuthenticated && !hasRequiredRole) {
-    return <Navigate to="/unauthorized" />;
   }
   
   return <Navigate to="/login" />;
@@ -54,7 +46,7 @@ function App() {
             <ProtectedRoute element={<ExpenseTracker />} />
           } />
           <Route path="/iot-monitoring" element={
-            <ProtectedRoute element={<IoTMonitoring />} requiredRole="admin" />
+            <ProtectedRoute element={<IoTMonitoring />} />
           } />
           <Route path="/weather" element={<Weather />} />
           <Route path="/unauthorized" element={

@@ -127,6 +127,11 @@
   ::selection {
     @apply bg-green-300/30 text-foreground;
   }
+  
+  /* Fix for theme transition */
+  html.dark {
+    color-scheme: dark;
+  }
 }
 
 @layer components {
@@ -161,5 +166,18 @@
     100% {
       background-position: 0% 50%;
     }
+  }
+  
+  /* Fullscreen styles */
+  :fullscreen {
+    @apply w-full h-full overflow-y-auto bg-background;
+  }
+  
+  :-webkit-full-screen {
+    @apply w-full h-full overflow-y-auto bg-background;
+  }
+  
+  :-ms-fullscreen {
+    @apply w-full h-full overflow-y-auto bg-background;
   }
 }

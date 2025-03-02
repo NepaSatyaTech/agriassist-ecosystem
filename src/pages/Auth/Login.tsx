@@ -9,7 +9,6 @@ import { Leaf, Mail, UserCog, User } from 'lucide-react';
 import { useAuth } from '@/hooks/use-auth';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
-import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { useToast } from '@/hooks/use-toast';
 
 const Login = () => {
@@ -18,7 +17,6 @@ const Login = () => {
   const { toast } = useToast();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [role, setRole] = useState('client');
   const [isLoading, setIsLoading] = useState(false);
 
   const handleLogin = async (e: React.FormEvent) => {
@@ -26,16 +24,15 @@ const Login = () => {
     setIsLoading(true);
     
     try {
-      // In a real app, role would be determined by the backend
-      // For demo purposes, we're setting it from the UI
-      const userData = { email, role };
+      // We'll set a default role of client for everyone
+      const userData = { email, role: 'client' };
       
       const success = await login(email, password);
       if (success) {
         localStorage.setItem('user', JSON.stringify(userData));
         toast({
           title: "Login successful",
-          description: `Welcome back, ${email}! You are logged in as ${role}.`,
+          description: `Welcome back, ${email}!`,
         });
         navigate('/');
       }
@@ -50,10 +47,10 @@ const Login = () => {
     setIsLoading(true);
     try {
       // In a real app, this would connect to Google OAuth
-      // For demo purposes, we'll create a user with the selected role
+      // For demo purposes, we'll create a user with the client role
       const googleUser = { 
         email: 'google-user@example.com', 
-        role: role
+        role: 'client'
       };
       
       localStorage.setItem('isAuthenticated', 'true');
@@ -61,7 +58,7 @@ const Login = () => {
       
       toast({
         title: "Google login successful",
-        description: `Welcome! You are logged in as ${role}.`,
+        description: "Welcome to AgriAssist!",
       });
       
       setTimeout(() => {
@@ -119,29 +116,6 @@ const Login = () => {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                 />
-              </div>
-              
-              <div className="space-y-2">
-                <Label>Select Role</Label>
-                <RadioGroup 
-                  defaultValue="client" 
-                  value={role}
-                  onValueChange={setRole}
-                  className="flex gap-6"
-                >
-                  <div className="flex items-center space-x-2">
-                    <RadioGroupItem value="client" id="client" />
-                    <Label htmlFor="client" className="flex items-center gap-1 cursor-pointer">
-                      <User className="h-4 w-4" /> Client
-                    </Label>
-                  </div>
-                  <div className="flex items-center space-x-2">
-                    <RadioGroupItem value="admin" id="admin" />
-                    <Label htmlFor="admin" className="flex items-center gap-1 cursor-pointer">
-                      <UserCog className="h-4 w-4" /> Admin
-                    </Label>
-                  </div>
-                </RadioGroup>
               </div>
               
               <Button type="submit" className="w-full" disabled={isLoading}>

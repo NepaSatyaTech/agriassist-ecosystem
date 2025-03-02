@@ -1,12 +1,13 @@
 
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { ChevronDown, Sun, Moon, Menu, X, LogOut, Leaf, UserCog, User } from 'lucide-react';
+import { ChevronDown, Sun, Moon, Menu, X, LogOut, Leaf, UserCog, User, UserPlus } from 'lucide-react';
 import { useTheme } from 'next-themes';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 import { useToast } from '@/hooks/use-toast';
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 
 const Navbar = () => {
   const { setTheme, theme, resolvedTheme } = useTheme();
@@ -68,7 +69,7 @@ const Navbar = () => {
     <header className={cn(
       "fixed top-0 w-full z-40 transition-all duration-200",
       isScrolled 
-        ? "bg-white dark:bg-gray-900 shadow-md py-3" 
+        ? "bg-white/90 dark:bg-gray-900/90 backdrop-blur-md shadow-md py-3" 
         : "bg-transparent py-5"
     )}>
       <div className="container mx-auto px-4 flex items-center justify-between">
@@ -115,10 +116,10 @@ const Navbar = () => {
         <div className="hidden md:flex items-center gap-2">
           {mounted && (
             <Button 
-              variant="ghost" 
+              variant="outline" 
               size="icon" 
               onClick={toggleTheme}
-              className="rounded-full"
+              className="rounded-full border-gray-200 dark:border-gray-700"
               aria-label={resolvedTheme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
             >
               <Sun className="h-5 w-5 rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
@@ -131,21 +132,33 @@ const Navbar = () => {
             <div className="flex items-center gap-2">
               <div className="flex items-center gap-1">
                 {isAdmin ? <UserCog className="h-4 w-4 text-primary" /> : <User className="h-4 w-4" />}
-                <span className="text-sm font-medium">{user?.email} ({user?.role})</span>
+                <span className="text-sm font-medium">{user?.email}</span>
               </div>
               <Button variant="ghost" size="icon" onClick={handleLogout}>
                 <LogOut className="h-5 w-5" />
               </Button>
             </div>
           ) : (
-            <>
-              <Link to="/login">
-                <Button variant="ghost">Login</Button>
-              </Link>
-              <Link to="/register">
-                <Button>Sign Up</Button>
-              </Link>
-            </>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button className="flex items-center gap-1">
+                  <UserPlus className="h-4 w-4" />
+                  <span>Account</span>
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="w-48">
+                <DropdownMenuItem asChild>
+                  <Link to="/login" className="w-full cursor-pointer">
+                    Login
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link to="/register" className="w-full cursor-pointer">
+                    Sign Up
+                  </Link>
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
           )}
         </div>
         
@@ -201,7 +214,7 @@ const Navbar = () => {
                   <span className="text-sm font-medium">Switch Theme</span>
                   {mounted && (
                     <Button 
-                      variant="ghost" 
+                      variant="outline" 
                       size="icon" 
                       onClick={toggleTheme}
                       className="rounded-full"
@@ -217,7 +230,7 @@ const Navbar = () => {
                   <div className="space-y-1">
                     <div className="flex items-center gap-1 mb-1">
                       {isAdmin ? <UserCog className="h-4 w-4 text-primary" /> : <User className="h-4 w-4" />}
-                      <span className="text-sm font-medium">{user?.email} ({user?.role})</span>
+                      <span className="text-sm font-medium">{user?.email}</span>
                     </div>
                     <Button className="w-full" variant="outline" onClick={handleLogout}>
                       <LogOut className="h-4 w-4 mr-2" /> Logout
