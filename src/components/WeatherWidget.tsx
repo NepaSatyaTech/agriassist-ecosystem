@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { Sun, Cloud, CloudRain, CloudSnow, Wind, CloudLightning, CloudDrizzle } from 'lucide-react';
+import { Sun, Cloud, CloudRain, CloudSnow, Wind, CloudLightning, CloudDrizzle, Thermometer } from 'lucide-react';
 
 interface WeatherData {
   location: string;
@@ -10,6 +10,7 @@ interface WeatherData {
   humidity: number;
   windSpeed: number;
   precipitation: number;
+  temperatureUnit?: string;
 }
 
 interface WeatherWidgetProps {
@@ -29,6 +30,7 @@ const weatherIcons = {
 
 const WeatherWidget = ({ data, className }: WeatherWidgetProps) => {
   const WeatherIcon = weatherIcons[data.weatherType];
+  const temperatureUnit = data.temperatureUnit || 'C';
 
   // Generate weather description based on weather type
   const getWeatherDescription = (type: string) => {
@@ -45,7 +47,7 @@ const WeatherWidget = ({ data, className }: WeatherWidgetProps) => {
   };
 
   return (
-    <div className={`glass-card p-6 shadow-sm hover:shadow-md transition-shadow ${className}`}>
+    <div className={`glass-card p-6 shadow-sm hover:shadow-md transition-shadow ${className} h-full`}>
       <div className="flex items-center justify-between mb-4">
         <div>
           <h3 className="text-lg font-semibold">{data.location}</h3>
@@ -58,7 +60,7 @@ const WeatherWidget = ({ data, className }: WeatherWidgetProps) => {
       
       <div className="flex items-end gap-2 mb-2">
         <div className="text-4xl font-bold">{data.temperature}°</div>
-        <div className="text-gray-500 dark:text-gray-400 ml-1 mb-1">C</div>
+        <div className="text-gray-500 dark:text-gray-400 ml-1 mb-1">{temperatureUnit}</div>
       </div>
       
       <p className="text-sm text-gray-600 dark:text-gray-300 mb-4">

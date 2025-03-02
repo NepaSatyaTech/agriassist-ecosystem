@@ -1,7 +1,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { ChevronDown, Sun, Moon, Menu, X, LogOut, Leaf } from 'lucide-react';
+import { ChevronDown, Sun, Moon, Menu, X, LogOut, Leaf, UserCog, User } from 'lucide-react';
 import { useTheme } from 'next-themes';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
@@ -12,7 +12,7 @@ const Navbar = () => {
   const { setTheme, theme, resolvedTheme } = useTheme();
   const [isScrolled, setIsScrolled] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [user, setUser] = useState<{ email: string } | null>(null);
+  const [user, setUser] = useState<{ email: string; role: string } | null>(null);
   const [mounted, setMounted] = useState(false);
   const navigate = useNavigate();
   const { toast } = useToast();
@@ -27,6 +27,11 @@ const Navbar = () => {
     const userData = localStorage.getItem('user');
     if (userData) {
       setUser(JSON.parse(userData));
+    } else if (authStatus) {
+      // If authenticated but no user data, set default role as client
+      const defaultUser = { email: 'user@example.com', role: 'client' };
+      setUser(defaultUser);
+      localStorage.setItem('user', JSON.stringify(defaultUser));
     }
   }, []);
 
@@ -56,6 +61,8 @@ const Navbar = () => {
     const currentTheme = resolvedTheme || theme;
     setTheme(currentTheme === 'dark' ? 'light' : 'dark');
   };
+
+  const isAdmin = user?.role === 'admin';
 
   return (
     <header className={cn(
@@ -122,7 +129,10 @@ const Navbar = () => {
           
           {isAuthenticated ? (
             <div className="flex items-center gap-2">
-              <span className="text-sm font-medium">{user?.email}</span>
+              <div className="flex items-center gap-1">
+                {isAdmin ? <UserCog className="h-4 w-4 text-primary" /> : <User className="h-4 w-4" />}
+                <span className="text-sm font-medium">{user?.email} ({user?.role})</span>
+              </div>
               <Button variant="ghost" size="icon" onClick={handleLogout}>
                 <LogOut className="h-5 w-5" />
               </Button>
@@ -187,7 +197,7 @@ const Navbar = () => {
               </nav>
               
               <div className="mt-auto p-4 border-t">
-                <div className="flex items-center justify-between mb-4">
+                <div className="flex items-center justify-between mb-3">
                   <span className="text-sm font-medium">Switch Theme</span>
                   {mounted && (
                     <Button 
@@ -204,18 +214,21 @@ const Navbar = () => {
                 </div>
                 
                 {isAuthenticated ? (
-                  <div className="space-y-2">
-                    <div className="text-sm font-medium">{user?.email}</div>
+                  <div className="space-y-1">
+                    <div className="flex items-center gap-1 mb-1">
+                      {isAdmin ? <UserCog className="h-4 w-4 text-primary" /> : <User className="h-4 w-4" />}
+                      <span className="text-sm font-medium">{user?.email} ({user?.role})</span>
+                    </div>
                     <Button className="w-full" variant="outline" onClick={handleLogout}>
                       <LogOut className="h-4 w-4 mr-2" /> Logout
                     </Button>
                   </div>
                 ) : (
-                  <div className="space-y-2">
-                    <Link to="/login">
+                  <div className="grid grid-cols-2 gap-2">
+                    <Link to="/login" className="col-span-1">
                       <Button className="w-full" variant="outline">Login</Button>
                     </Link>
-                    <Link to="/register">
+                    <Link to="/register" className="col-span-1">
                       <Button className="w-full">Sign Up</Button>
                     </Link>
                   </div>

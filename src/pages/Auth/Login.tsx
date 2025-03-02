@@ -5,16 +5,20 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
-import { Leaf, Mail } from 'lucide-react';
+import { Leaf, Mail, UserCog, User } from 'lucide-react';
 import { useAuth } from '@/hooks/use-auth';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
+import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
+import { useToast } from '@/hooks/use-toast';
 
 const Login = () => {
   const navigate = useNavigate();
   const { login } = useAuth();
+  const { toast } = useToast();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [role, setRole] = useState('client');
   const [isLoading, setIsLoading] = useState(false);
 
   const handleLogin = async (e: React.FormEvent) => {
@@ -22,8 +26,17 @@ const Login = () => {
     setIsLoading(true);
     
     try {
+      // In a real app, role would be determined by the backend
+      // For demo purposes, we're setting it from the UI
+      const userData = { email, role };
+      
       const success = await login(email, password);
       if (success) {
+        localStorage.setItem('user', JSON.stringify(userData));
+        toast({
+          title: "Login successful",
+          description: `Welcome back, ${email}! You are logged in as ${role}.`,
+        });
         navigate('/');
       }
     } catch (error) {
@@ -36,12 +49,24 @@ const Login = () => {
   const handleGoogleLogin = async () => {
     setIsLoading(true);
     try {
-      // This would normally connect to a real Google OAuth provider
-      console.log('Google login attempted');
-      // Mock successful login for demo purposes
+      // In a real app, this would connect to Google OAuth
+      // For demo purposes, we'll create a user with the selected role
+      const googleUser = { 
+        email: 'google-user@example.com', 
+        role: role
+      };
+      
+      localStorage.setItem('isAuthenticated', 'true');
+      localStorage.setItem('user', JSON.stringify(googleUser));
+      
+      toast({
+        title: "Google login successful",
+        description: `Welcome! You are logged in as ${role}.`,
+      });
+      
       setTimeout(() => {
         navigate('/');
-      }, 1000);
+      }, 500);
     } catch (error) {
       console.error('Google login error:', error);
     } finally {
@@ -53,7 +78,7 @@ const Login = () => {
     <div className="min-h-screen flex flex-col">
       <Navbar />
       
-      <div className="flex-grow flex items-center justify-center bg-gray-50 dark:bg-gray-900 px-4 py-12">
+      <div className="flex-grow flex items-center justify-center bg-gray-50 dark:bg-gray-900 px-4 py-8">
         <Card className="w-full max-w-md">
           <CardHeader className="space-y-1 text-center">
             <div className="flex justify-center mb-2">
@@ -95,6 +120,30 @@ const Login = () => {
                   onChange={(e) => setPassword(e.target.value)}
                 />
               </div>
+              
+              <div className="space-y-2">
+                <Label>Select Role</Label>
+                <RadioGroup 
+                  defaultValue="client" 
+                  value={role}
+                  onValueChange={setRole}
+                  className="flex gap-6"
+                >
+                  <div className="flex items-center space-x-2">
+                    <RadioGroupItem value="client" id="client" />
+                    <Label htmlFor="client" className="flex items-center gap-1 cursor-pointer">
+                      <User className="h-4 w-4" /> Client
+                    </Label>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <RadioGroupItem value="admin" id="admin" />
+                    <Label htmlFor="admin" className="flex items-center gap-1 cursor-pointer">
+                      <UserCog className="h-4 w-4" /> Admin
+                    </Label>
+                  </div>
+                </RadioGroup>
+              </div>
+              
               <Button type="submit" className="w-full" disabled={isLoading}>
                 {isLoading ? "Signing in..." : "Sign in"}
               </Button>
