@@ -7,6 +7,13 @@ import { Input } from '@/components/ui/input';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 import { Cloud, Search, MapPin, ArrowRight, Loader2 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
+import { 
+  Select, 
+  SelectContent, 
+  SelectItem, 
+  SelectTrigger, 
+  SelectValue 
+} from '@/components/ui/select';
 
 // Example weather mapping function
 const mapWeatherTypeFromCode = (code: number): 'sunny' | 'cloudy' | 'rainy' | 'snowy' | 'windy' | 'stormy' | 'drizzle' => {
@@ -299,7 +306,6 @@ const Weather = () => {
                     </TabsContent>
                     
                     <TabsContent value="agricultural">
-                      {/* Agricultural insights section */}
                       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
                         <div className="lg:col-span-1 glass-card p-6">
                           <h3 className="text-xl font-semibold mb-4">Growing Conditions</h3>
