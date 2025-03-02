@@ -10,6 +10,7 @@ import Contact from './pages/Contact';
 import ExpenseTracker from './pages/ExpenseTracker';
 import IoTMonitoring from './pages/IoTMonitoring';
 import Weather from './pages/Weather';
+import DiseaseScanner from './pages/DiseaseScanner';
 import { AuthProvider } from './hooks/use-auth';
 import { useEffect, useState } from 'react';
 
@@ -49,6 +50,7 @@ function App() {
             <ProtectedRoute element={<IoTMonitoring />} />
           } />
           <Route path="/weather" element={<Weather />} />
+          <Route path="/disease-scanner" element={<DiseaseScanner />} />
           <Route path="/unauthorized" element={
             <div className="min-h-screen flex items-center justify-center">
               <div className="text-center p-8">

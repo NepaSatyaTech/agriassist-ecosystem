@@ -1,7 +1,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { ChevronDown, Sun, Moon, Menu, X, LogOut, Leaf, UserCog, User, UserPlus } from 'lucide-react';
+import { ChevronDown, Sun, Moon, Menu, X, LogOut, Leaf, UserCog, User, UserPlus, ScanSearch } from 'lucide-react';
 import { useTheme } from 'next-themes';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
@@ -81,8 +81,8 @@ const Navbar = () => {
           <span className="font-bold text-xl">AgriAssist</span>
         </Link>
         
-        {/* Desktop Navigation */}
-        <nav className="hidden md:flex items-center gap-6">
+        {/* Desktop Navigation - UPDATED for even spacing */}
+        <nav className="hidden md:flex items-center space-x-8">
           <Link to="/" className="text-sm font-medium hover:text-primary transition-colors">
             Home
           </Link>
@@ -104,6 +104,9 @@ const Navbar = () => {
                 <Link to="/weather" className="block px-4 py-2 text-sm hover:bg-gray-100 dark:hover:bg-gray-700">
                   Weather Forecast
                 </Link>
+                <Link to="/disease-scanner" className="block px-4 py-2 text-sm hover:bg-gray-100 dark:hover:bg-gray-700">
+                  Plant Disease Scanner
+                </Link>
               </div>
             </div>
           </div>
@@ -112,8 +115,8 @@ const Navbar = () => {
           </Link>
         </nav>
         
-        {/* Action Buttons */}
-        <div className="hidden md:flex items-center gap-2">
+        {/* Action Buttons - UPDATED to be aligned properly */}
+        <div className="hidden md:flex items-center space-x-4">
           {mounted && (
             <Button 
               variant="outline" 
@@ -201,6 +204,9 @@ const Navbar = () => {
                     </Link>
                     <Link to="/weather" className="block px-4 py-2 text-sm hover:bg-gray-100 dark:hover:bg-gray-800 rounded-md">
                       Weather Forecast
+                    </Link>
+                    <Link to="/disease-scanner" className="block px-4 py-2 text-sm hover:bg-gray-100 dark:hover:bg-gray-800 rounded-md">
+                      Plant Disease Scanner
                     </Link>
                   </div>
                 </details>
