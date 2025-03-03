@@ -14,6 +14,7 @@ interface AuthContextType {
   login: (email: string, password: string) => Promise<boolean>;
   register: (name: string, email: string, password: string) => Promise<boolean>;
   logout: () => void;
+  checkAuth: () => Promise<void>; // Added checkAuth method to interface
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -24,7 +25,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const { toast } = useToast();
   const navigate = useNavigate();
 
-  useEffect(() => {
+  // Check authentication status
+  const checkAuth = async () => {
     // Check if user is already logged in
     const authStatus = localStorage.getItem('isAuthenticated') === 'true';
     const userData = localStorage.getItem('user');
@@ -33,6 +35,11 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       setIsAuthenticated(true);
       setUser(JSON.parse(userData));
     }
+  };
+
+  useEffect(() => {
+    // Initial auth check
+    checkAuth();
   }, []);
 
   const login = async (email: string, password: string): Promise<boolean> => {
@@ -113,7 +120,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ user, isAuthenticated, login, register, logout }}>
+    <AuthContext.Provider value={{ user, isAuthenticated, login, register, logout, checkAuth }}>
       {children}
     </AuthContext.Provider>
   );
