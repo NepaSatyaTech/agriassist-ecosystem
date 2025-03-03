@@ -55,6 +55,9 @@ const MobileNav = ({ isAuthenticated, user, mounted, handleLogout }: MobileNavPr
                 <Link to="/disease-scanner" className="block px-4 py-2 text-sm hover:bg-gray-100 dark:hover:bg-gray-800 rounded-md">
                   Plant Disease Scanner
                 </Link>
+                <Link to="/labor-management" className="block px-4 py-2 text-sm hover:bg-gray-100 dark:hover:bg-gray-800 rounded-md">
+                  Labor Management
+                </Link>
               </div>
             </details>
             <Link to="/contact" className="px-4 py-2 text-sm font-medium hover:bg-gray-100 dark:hover:bg-gray-800 rounded-md">

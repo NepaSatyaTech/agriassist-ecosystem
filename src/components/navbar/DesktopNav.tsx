@@ -5,7 +5,7 @@ import { ChevronDown } from 'lucide-react';
 
 const DesktopNav = () => {
   return (
-    <nav className="hidden md:flex items-center space-x-8">
+    <nav className="hidden md:flex items-center gap-6">
       <Link to="/" className="text-sm font-medium hover:text-primary transition-colors">
         Home
       </Link>
@@ -29,6 +29,9 @@ const DesktopNav = () => {
             </Link>
             <Link to="/disease-scanner" className="block px-4 py-2 text-sm hover:bg-gray-100 dark:hover:bg-gray-700">
               Plant Disease Scanner
+            </Link>
+            <Link to="/labor-management" className="block px-4 py-2 text-sm hover:bg-gray-100 dark:hover:bg-gray-700">
+              Labor Management
             </Link>
           </div>
         </div>
