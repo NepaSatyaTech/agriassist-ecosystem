@@ -1,6 +1,6 @@
 
 import React, { useState, useEffect } from 'react';
-import Navbar from '@/components/Navbar';
+import Navbar from '@/components/navbar';
 import Footer from '@/components/Footer';
 import SeedRecommendation from '@/components/SeedRecommendation';
 import SeedQuantityCalculator from '@/components/SeedQuantityCalculator';

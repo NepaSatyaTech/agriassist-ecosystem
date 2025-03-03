@@ -1,6 +1,6 @@
 
 import React from 'react';
-import Navbar from '@/components/Navbar';
+import Navbar from '@/components/navbar';
 import Footer from '@/components/Footer';
 import IoTSensorCard from '@/components/IoTSensorCard';
 import { Button } from '@/components/ui/button';

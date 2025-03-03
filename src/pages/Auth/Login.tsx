@@ -7,7 +7,7 @@ import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Leaf, Mail, UserCog, User } from 'lucide-react';
 import { useAuth } from '@/hooks/use-auth';
-import Navbar from '@/components/Navbar';
+import Navbar from '@/components/navbar';
 import Footer from '@/components/Footer';
 import { useToast } from '@/hooks/use-toast';
 
