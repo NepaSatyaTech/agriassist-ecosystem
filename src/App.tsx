@@ -1,6 +1,6 @@
 
 import React, { useState, useEffect } from 'react';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { Routes, Route } from 'react-router-dom';
 import Index from '@/pages/Index';
 import Login from '@/pages/Auth/Login';
 import Register from '@/pages/Auth/Register';
@@ -31,21 +31,19 @@ const App = () => {
   }
 
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<Index />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Register />} />
-        <Route path="/seed-guide" element={<SeedGuide />} />
-        <Route path="/expense-tracker" element={<ExpenseTracker />} />
-        <Route path="/weather" element={<Weather />} />
-        <Route path="/iot-monitoring" element={<IoTMonitoring />} />
-        <Route path="/disease-scanner" element={<DiseaseScanner />} />
-        <Route path="/contact" element={<Contact />} />
-        <Route path="/labor-management" element={<LaborManagement />} />
-        <Route path="*" element={<NotFound />} />
-      </Routes>
-    </BrowserRouter>
+    <Routes>
+      <Route path="/" element={<Index />} />
+      <Route path="/login" element={<Login />} />
+      <Route path="/register" element={<Register />} />
+      <Route path="/seed-guide" element={<SeedGuide />} />
+      <Route path="/expense-tracker" element={<ExpenseTracker />} />
+      <Route path="/weather" element={<Weather />} />
+      <Route path="/iot-monitoring" element={<IoTMonitoring />} />
+      <Route path="/disease-scanner" element={<DiseaseScanner />} />
+      <Route path="/contact" element={<Contact />} />
+      <Route path="/labor-management" element={<LaborManagement />} />
+      <Route path="*" element={<NotFound />} />
+    </Routes>
   );
 };
 
