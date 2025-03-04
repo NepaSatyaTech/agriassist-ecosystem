@@ -8,13 +8,18 @@ import LaborersList from '@/components/labor/LaborersList';
 import LaborerForm from '@/components/labor/LaborerForm';
 import LaborRecords from '@/components/labor/LaborRecords';
 import RecordForm from '@/components/labor/RecordForm';
-import Reports from '@/components/labor/Reports';
-import { ClipboardList, FileText, Users } from 'lucide-react';
+import { ClipboardList, Users } from 'lucide-react';
+
+interface LaborManagementState {
+  laborers: 'list' | 'add' | 'edit';
+  records: 'list' | 'add';
+  editLaborerId?: string;
+}
 
 const LaborManagement = () => {
-  // State for tracking active view in each tab
-  const [activeView, setActiveView] = useState({
-    laborers: 'list', // 'list' or 'add'
+  // State for tracking active view in each tab with proper TypeScript interface
+  const [activeView, setActiveView] = useState<LaborManagementState>({
+    laborers: 'list', // 'list', 'add', or 'edit'
     records: 'list',  // 'list' or 'add'
   });
 
@@ -28,7 +33,7 @@ const LaborManagement = () => {
             <h1 className="text-3xl font-bold mb-6">Farm Labor Management</h1>
             
             <Tabs defaultValue="laborers" className="w-full">
-              <TabsList className="grid grid-cols-3 mb-8">
+              <TabsList className="grid grid-cols-2 mb-8">
                 <TabsTrigger value="laborers" className="flex items-center gap-2">
                   <Users className="h-4 w-4" />
                   <span>Laborers</span>
@@ -36,10 +41,6 @@ const LaborManagement = () => {
                 <TabsTrigger value="records" className="flex items-center gap-2">
                   <ClipboardList className="h-4 w-4" />
                   <span>Labor Records</span>
-                </TabsTrigger>
-                <TabsTrigger value="reports" className="flex items-center gap-2">
-                  <FileText className="h-4 w-4" />
-                  <span>Reports</span>
                 </TabsTrigger>
               </TabsList>
               
@@ -60,7 +61,10 @@ const LaborManagement = () => {
                     ) : (
                       <LaborerForm 
                         onCancel={() => setActiveView({...activeView, laborers: 'list'})}
-                        laborer={activeView.editLaborerId ? undefined : undefined} 
+                        laborer={activeView.editLaborerId ? 
+                          // Find the laborer with the matching ID in your data
+                          SAMPLE_LABORERS.find(l => l.id === activeView.editLaborerId) 
+                          : undefined} 
                       />
                     )}
                   </CardContent>
@@ -88,20 +92,6 @@ const LaborManagement = () => {
                   </CardContent>
                 </Card>
               </TabsContent>
-              
-              <TabsContent value="reports">
-                <Card>
-                  <CardHeader>
-                    <CardTitle>Reports & Analytics</CardTitle>
-                    <CardDescription>
-                      Generate reports and analyze labor data across seasons and months.
-                    </CardDescription>
-                  </CardHeader>
-                  <CardContent>
-                    <Reports />
-                  </CardContent>
-                </Card>
-              </TabsContent>
             </Tabs>
           </div>
         </div>
@@ -111,5 +101,69 @@ const LaborManagement = () => {
     </div>
   );
 };
+
+// Sample data that should be accessible to the component
+const SAMPLE_LABORERS = [
+  { 
+    id: '1', 
+    name: 'Amit Kumar', 
+    phone: '9876543210', 
+    specialization: 'Harvesting', 
+    workingDays: 'Monday to Saturday', 
+    wageRate: 350,
+    address: 'Village Raipur, District Bhopal',
+    workingSummary: {
+      daily: '8 hours',
+      monthly: '26 days',
+      yearly: '300 days'
+    },
+    notes: 'Experienced in rice and wheat harvesting. Has own tools.'
+  },
+  { 
+    id: '2', 
+    name: 'Priya Singh', 
+    phone: '9876543211', 
+    specialization: 'Sowing', 
+    workingDays: 'Monday to Friday', 
+    wageRate: 330,
+    address: 'Village Gandhigram, District Indore',
+    workingSummary: {
+      daily: '7 hours',
+      monthly: '22 days',
+      yearly: '260 days'
+    },
+    notes: 'Skilled in traditional and modern sowing techniques.'
+  },
+  { 
+    id: '3', 
+    name: 'Rajesh Verma', 
+    phone: '9876543212', 
+    specialization: 'Irrigation', 
+    workingDays: 'All Days', 
+    wageRate: 380,
+    address: 'Village Khandwa, District Khandwa',
+    workingSummary: {
+      daily: '9 hours',
+      monthly: '30 days',
+      yearly: '340 days'
+    },
+    notes: 'Expert in drip irrigation systems and water management.'
+  },
+  { 
+    id: '4', 
+    name: 'Sunita Devi', 
+    phone: '9876543213', 
+    specialization: 'General', 
+    workingDays: 'Monday, Wednesday, Friday', 
+    wageRate: 320,
+    address: 'Village Bamori, District Gwalior',
+    workingSummary: {
+      daily: '6 hours',
+      monthly: '12 days',
+      yearly: '150 days'
+    },
+    notes: 'Prefers part-time work. Very reliable and punctual.'
+  },
+];
 
 export default LaborManagement;
