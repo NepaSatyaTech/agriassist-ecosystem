@@ -1,60 +1,30 @@
 
 import React, { useState } from 'react';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Textarea } from '@/components/ui/textarea';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { useToast } from '@/hooks/use-toast';
-import { ArrowLeft, CalendarPlus } from 'lucide-react';
-import { format } from 'date-fns';
-
-// Sample data - in a real app this would come from your database
-const SAMPLE_LABORERS = [
-  { id: '1', name: 'Amit Kumar', wageRate: 350 },
-  { id: '2', name: 'Priya Singh', wageRate: 330 },
-  { id: '3', name: 'Rajesh Verma', wageRate: 380 },
-  { id: '4', name: 'Sunita Devi', wageRate: 320 },
-];
+import { ArrowLeft } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import LaborerSelector from './record-form/LaborerSelector';
+import DateSelector from './record-form/DateSelector';
+import SeasonMonthSelector from './record-form/SeasonMonthSelector';
+import TaskInput from './record-form/TaskInput';
+import WorkPaymentInputs from './record-form/WorkPaymentInputs';
+import NotesInput from './record-form/NotesInput';
+import FormActions from './record-form/FormActions';
+import { 
+  SAMPLE_LABORERS,
+  initializeFormData,
+  RecordFormData,
+  RecordType
+} from './utils/formUtils';
 
 interface RecordFormProps {
   onCancel: () => void;
-  record?: {
-    id: string;
-    laborerId: string;
-    date: Date;
-    season: string;
-    month: string;
-    hours: number;
-    task: string;
-    wage: number;
-    totalPaid: number;
-    notes?: string;
-  };
+  record?: RecordType;
 }
 
 const RecordForm = ({ onCancel, record }: RecordFormProps) => {
   const { toast } = useToast();
-  const today = new Date();
-  
-  const [formData, setFormData] = useState({
-    laborerId: record?.laborerId || '',
-    date: record?.date ? format(record.date, 'yyyy-MM-dd') : format(today, 'yyyy-MM-dd'),
-    season: record?.season || determineCurrentSeason(),
-    month: record?.month || format(today, 'MMMM'),
-    hours: record?.hours?.toString() || '8',
-    task: record?.task || '',
-    wage: record?.wage?.toString() || '',
-    totalPaid: record?.totalPaid?.toString() || '',
-    notes: record?.notes || '',
-  });
-  
-  function determineCurrentSeason() {
-    const month = today.getMonth() + 1; // 1-12
-    if (month >= 6 && month <= 10) return 'Kharif';
-    if (month >= 11 || month <= 3) return 'Rabi';
-    return 'Zaid';
-  }
+  const [formData, setFormData] = useState<RecordFormData>(initializeFormData(record));
   
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
@@ -122,161 +92,46 @@ const RecordForm = ({ onCancel, record }: RecordFormProps) => {
       
       <form onSubmit={handleSubmit} className="space-y-4">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div className="space-y-2">
-            <Label htmlFor="laborerId">Select Laborer <span className="text-red-500">*</span></Label>
-            <Select 
-              value={formData.laborerId} 
-              onValueChange={(value) => handleSelectChange('laborerId', value)}
-              required
-            >
-              <SelectTrigger>
-                <SelectValue placeholder="Select a laborer" />
-              </SelectTrigger>
-              <SelectContent>
-                {SAMPLE_LABORERS.map(laborer => (
-                  <SelectItem key={laborer.id} value={laborer.id}>
-                    {laborer.name} (₹{laborer.wageRate}/day)
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
-          
-          <div className="space-y-2">
-            <Label htmlFor="date">Date <span className="text-red-500">*</span></Label>
-            <Input
-              id="date"
-              name="date"
-              type="date"
-              value={formData.date}
-              onChange={handleChange}
-              required
-            />
-          </div>
-        </div>
-        
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <div className="space-y-2">
-            <Label htmlFor="season">Season <span className="text-red-500">*</span></Label>
-            <Select 
-              value={formData.season} 
-              onValueChange={(value) => handleSelectChange('season', value)}
-              required
-            >
-              <SelectTrigger>
-                <SelectValue placeholder="Select season" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="Kharif">Kharif (June-October)</SelectItem>
-                <SelectItem value="Rabi">Rabi (November-March)</SelectItem>
-                <SelectItem value="Zaid">Zaid (April-May)</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
-          
-          <div className="space-y-2">
-            <Label htmlFor="month">Month <span className="text-red-500">*</span></Label>
-            <Select 
-              value={formData.month} 
-              onValueChange={(value) => handleSelectChange('month', value)}
-              required
-            >
-              <SelectTrigger>
-                <SelectValue placeholder="Select month" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="January">January</SelectItem>
-                <SelectItem value="February">February</SelectItem>
-                <SelectItem value="March">March</SelectItem>
-                <SelectItem value="April">April</SelectItem>
-                <SelectItem value="May">May</SelectItem>
-                <SelectItem value="June">June</SelectItem>
-                <SelectItem value="July">July</SelectItem>
-                <SelectItem value="August">August</SelectItem>
-                <SelectItem value="September">September</SelectItem>
-                <SelectItem value="October">October</SelectItem>
-                <SelectItem value="November">November</SelectItem>
-                <SelectItem value="December">December</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
-          
-          <div className="space-y-2">
-            <Label htmlFor="task">Task Performed <span className="text-red-500">*</span></Label>
-            <Input
-              id="task"
-              name="task"
-              value={formData.task}
-              onChange={handleChange}
-              placeholder="e.g., Harvesting Rice"
-              required
-            />
-          </div>
-        </div>
-        
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <div className="space-y-2">
-            <Label htmlFor="hours">Hours Worked <span className="text-red-500">*</span></Label>
-            <Input
-              id="hours"
-              name="hours"
-              type="number"
-              step="0.5"
-              min="0"
-              value={formData.hours}
-              onChange={handleChange}
-              required
-            />
-          </div>
-          
-          <div className="space-y-2">
-            <Label htmlFor="wage">Hourly Wage (₹) <span className="text-red-500">*</span></Label>
-            <Input
-              id="wage"
-              name="wage"
-              type="number"
-              min="0"
-              value={formData.wage}
-              onChange={handleChange}
-              required
-            />
-          </div>
-          
-          <div className="space-y-2">
-            <Label htmlFor="totalPaid">Total Amount Paid (₹) <span className="text-red-500">*</span></Label>
-            <Input
-              id="totalPaid"
-              name="totalPaid"
-              type="number"
-              min="0"
-              value={formData.totalPaid}
-              onChange={handleChange}
-              required
-            />
-          </div>
-        </div>
-        
-        <div className="space-y-2">
-          <Label htmlFor="notes">Additional Notes</Label>
-          <Textarea
-            id="notes"
-            name="notes"
-            value={formData.notes}
+          <LaborerSelector 
+            laborerId={formData.laborerId} 
+            onSelectChange={handleSelectChange} 
+          />
+          <DateSelector 
+            date={formData.date}
             onChange={handleChange}
-            placeholder="Any additional information about the work or payment"
-            rows={3}
           />
         </div>
         
-        <div className="flex justify-end gap-2 pt-4">
-          <Button type="button" variant="outline" onClick={onCancel}>
-            Cancel
-          </Button>
-          <Button type="submit">
-            <CalendarPlus className="mr-2 h-4 w-4" />
-            {record ? 'Update Record' : 'Add Record'}
-          </Button>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <SeasonMonthSelector 
+            season={formData.season}
+            month={formData.month}
+            onSelectChange={handleSelectChange}
+          />
+          <TaskInput 
+            task={formData.task}
+            onChange={handleChange}
+          />
         </div>
+        
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <WorkPaymentInputs 
+            hours={formData.hours}
+            wage={formData.wage}
+            totalPaid={formData.totalPaid}
+            onChange={handleChange}
+          />
+        </div>
+        
+        <NotesInput 
+          notes={formData.notes}
+          onChange={handleChange}
+        />
+        
+        <FormActions 
+          onCancel={onCancel}
+          isEditing={!!record}
+        />
       </form>
     </div>
   );
