@@ -1,5 +1,5 @@
 
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { Routes, Route } from 'react-router-dom';
 import Index from '@/pages/Index';
 import Login from '@/pages/Auth/Login';
@@ -11,25 +11,9 @@ import IoTMonitoring from '@/pages/IoTMonitoring';
 import DiseaseScanner from '@/pages/DiseaseScanner';
 import Contact from '@/pages/Contact';
 import NotFound from '@/pages/NotFound';
-import { useAuth } from '@/hooks/use-auth';
 import LaborManagement from '@/pages/LaborManagement';
 
 const App = () => {
-  const { checkAuth } = useAuth();
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    const authenticate = async () => {
-      await checkAuth();
-      setLoading(false);
-    };
-    authenticate();
-  }, [checkAuth]);
-
-  if (loading) {
-    return <div>Loading...</div>;
-  }
-
   return (
     <Routes>
       <Route path="/" element={<Index />} />

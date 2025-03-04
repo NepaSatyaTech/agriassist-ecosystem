@@ -8,6 +8,12 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { useToast } from '@/hooks/use-toast';
 import { UserCheck, ArrowLeft } from 'lucide-react';
 
+interface WorkingSummary {
+  daily: string;
+  monthly: string;
+  yearly: string;
+}
+
 interface LaborerFormProps {
   onCancel: () => void;
   laborer?: {
@@ -18,6 +24,7 @@ interface LaborerFormProps {
     workingDays: string;
     wageRate: number;
     address?: string;
+    workingSummary?: WorkingSummary;
     notes?: string;
   };
 }
@@ -31,12 +38,30 @@ const LaborerForm = ({ onCancel, laborer }: LaborerFormProps) => {
     workingDays: laborer?.workingDays || '',
     wageRate: laborer?.wageRate?.toString() || '',
     address: laborer?.address || '',
+    workingSummary: {
+      daily: laborer?.workingSummary?.daily || '',
+      monthly: laborer?.workingSummary?.monthly || '',
+      yearly: laborer?.workingSummary?.yearly || '',
+    },
     notes: laborer?.notes || '',
   });
   
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
+    
+    // Handle nested workingSummary fields
+    if (name.startsWith('workingSummary.')) {
+      const field = name.split('.')[1];
+      setFormData(prev => ({
+        ...prev,
+        workingSummary: {
+          ...prev.workingSummary,
+          [field]: value
+        }
+      }));
+    } else {
+      setFormData(prev => ({ ...prev, [name]: value }));
+    }
   };
   
   const handleSelectChange = (name: string, value: string) => {
@@ -159,6 +184,44 @@ const LaborerForm = ({ onCancel, laborer }: LaborerFormProps) => {
             onChange={handleChange}
             placeholder="Enter residential address"
           />
+        </div>
+        
+        <div className="space-y-4">
+          <Label>Working Summary</Label>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div className="space-y-2">
+              <Label htmlFor="workingSummary.daily">Daily Hours</Label>
+              <Input
+                id="workingSummary.daily"
+                name="workingSummary.daily"
+                value={formData.workingSummary.daily}
+                onChange={handleChange}
+                placeholder="e.g., 8 hours"
+              />
+            </div>
+            
+            <div className="space-y-2">
+              <Label htmlFor="workingSummary.monthly">Monthly Days</Label>
+              <Input
+                id="workingSummary.monthly"
+                name="workingSummary.monthly"
+                value={formData.workingSummary.monthly}
+                onChange={handleChange}
+                placeholder="e.g., 26 days"
+              />
+            </div>
+            
+            <div className="space-y-2">
+              <Label htmlFor="workingSummary.yearly">Yearly Days</Label>
+              <Input
+                id="workingSummary.yearly"
+                name="workingSummary.yearly"
+                value={formData.workingSummary.yearly}
+                onChange={handleChange}
+                placeholder="e.g., 300 days"
+              />
+            </div>
+          </div>
         </div>
         
         <div className="space-y-2">

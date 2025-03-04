@@ -9,8 +9,7 @@ import LaborerForm from '@/components/labor/LaborerForm';
 import LaborRecords from '@/components/labor/LaborRecords';
 import RecordForm from '@/components/labor/RecordForm';
 import Reports from '@/components/labor/Reports';
-import UserManagement from '@/components/labor/UserManagement';
-import { UserPlus, ClipboardList, FileText, Users } from 'lucide-react';
+import { ClipboardList, FileText, Users } from 'lucide-react';
 
 const LaborManagement = () => {
   // State for tracking active view in each tab
@@ -29,7 +28,7 @@ const LaborManagement = () => {
             <h1 className="text-3xl font-bold mb-6">Farm Labor Management</h1>
             
             <Tabs defaultValue="laborers" className="w-full">
-              <TabsList className="grid grid-cols-4 mb-8">
+              <TabsList className="grid grid-cols-3 mb-8">
                 <TabsTrigger value="laborers" className="flex items-center gap-2">
                   <Users className="h-4 w-4" />
                   <span>Laborers</span>
@@ -41,10 +40,6 @@ const LaborManagement = () => {
                 <TabsTrigger value="reports" className="flex items-center gap-2">
                   <FileText className="h-4 w-4" />
                   <span>Reports</span>
-                </TabsTrigger>
-                <TabsTrigger value="users" className="flex items-center gap-2">
-                  <UserPlus className="h-4 w-4" />
-                  <span>User Management</span>
                 </TabsTrigger>
               </TabsList>
               
@@ -60,10 +55,12 @@ const LaborManagement = () => {
                     {activeView.laborers === 'list' ? (
                       <LaborersList 
                         onAddNew={() => setActiveView({...activeView, laborers: 'add'})}
+                        onEdit={(laborerId) => setActiveView({...activeView, laborers: 'edit', editLaborerId: laborerId})}
                       />
                     ) : (
                       <LaborerForm 
                         onCancel={() => setActiveView({...activeView, laborers: 'list'})}
+                        laborer={activeView.editLaborerId ? undefined : undefined} 
                       />
                     )}
                   </CardContent>
@@ -102,20 +99,6 @@ const LaborManagement = () => {
                   </CardHeader>
                   <CardContent>
                     <Reports />
-                  </CardContent>
-                </Card>
-              </TabsContent>
-              
-              <TabsContent value="users">
-                <Card>
-                  <CardHeader>
-                    <CardTitle>User Management</CardTitle>
-                    <CardDescription>
-                      Manage user accounts and permissions.
-                    </CardDescription>
-                  </CardHeader>
-                  <CardContent>
-                    <UserManagement />
                   </CardContent>
                 </Card>
               </TabsContent>
