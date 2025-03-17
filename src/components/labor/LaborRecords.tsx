@@ -29,7 +29,8 @@ const SAMPLE_RECORDS = [
     hours: 8,
     task: 'Harvesting Rice',
     wage: 350,
-    totalPaid: 350
+    totalPaid: 2800,
+    notes: 'Completed harvesting the east field'
   },
   { 
     id: '2', 
@@ -41,7 +42,8 @@ const SAMPLE_RECORDS = [
     hours: 6,
     task: 'Seed Sorting',
     wage: 330,
-    totalPaid: 330
+    totalPaid: 1980,
+    notes: 'Sorted wheat seeds for next season'
   },
   { 
     id: '3', 
@@ -53,7 +55,8 @@ const SAMPLE_RECORDS = [
     hours: 9,
     task: 'Irrigation',
     wage: 380,
-    totalPaid: 380
+    totalPaid: 3420,
+    notes: 'Set up irrigation for new crop'
   },
   { 
     id: '4', 
@@ -65,15 +68,17 @@ const SAMPLE_RECORDS = [
     hours: 7,
     task: 'Weeding',
     wage: 320,
-    totalPaid: 320
+    totalPaid: 2240,
+    notes: 'Cleared weeds from south field'
   },
 ];
 
 interface LaborRecordsProps {
   onAddNew: () => void;
+  onEdit?: (id: string) => void;
 }
 
-const LaborRecords = ({ onAddNew }: LaborRecordsProps) => {
+const LaborRecords = ({ onAddNew, onEdit }: LaborRecordsProps) => {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedSeason, setSelectedSeason] = useState('');
   const [selectedMonth, setSelectedMonth] = useState('');
@@ -103,6 +108,12 @@ const LaborRecords = ({ onAddNew }: LaborRecordsProps) => {
       setRecords(records.filter(r => r.id !== recordToDelete));
       setRecordToDelete(null);
       setDeleteDialogOpen(false);
+    }
+  };
+
+  const handleEdit = (id: string) => {
+    if (onEdit) {
+      onEdit(id);
     }
   };
 
@@ -194,7 +205,7 @@ const LaborRecords = ({ onAddNew }: LaborRecordsProps) => {
                   <TableCell>₹{record.totalPaid}</TableCell>
                   <TableCell className="text-right">
                     <div className="flex justify-end gap-2">
-                      <Button variant="ghost" size="icon">
+                      <Button variant="ghost" size="icon" onClick={() => handleEdit(record.id)}>
                         <Edit className="h-4 w-4" />
                       </Button>
                       <Button variant="ghost" size="icon" onClick={() => handleDelete(record.id)}>

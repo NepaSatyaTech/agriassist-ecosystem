@@ -1,4 +1,3 @@
-
 import React, { useState, useRef } from 'react';
 import { Upload, Camera, RefreshCw, AlertCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -11,39 +10,44 @@ interface DetectedDisease {
   description: string;
   treatment: string;
   prevention: string;
+  medicineImage: string;
 }
 
-// Mock database of plant diseases and treatments
 const plantDiseaseDatabase: Record<string, Omit<DetectedDisease, 'confidence'>> = {
   'apple_scab': {
     name: 'Apple Scab',
     description: 'A fungal disease that causes dark, scabby lesions on leaves and fruit.',
     treatment: 'Apply fungicide specifically labeled for apple scab. Remove and destroy infected leaves and fruit.',
-    prevention: 'Plant resistant varieties. Improve air circulation by pruning. Apply preventative fungicide sprays.'
+    prevention: 'Plant resistant varieties. Improve air circulation by pruning. Apply preventative fungicide sprays.',
+    medicineImage: 'https://images.unsplash.com/photo-1518770660439-4636190af475'
   },
   'black_spot': {
     name: 'Black Spot',
     description: 'Causes black spots with fringed margins on leaves, which may yellow and drop.',
     treatment: 'Apply fungicide. Remove and destroy infected leaves. Avoid overhead watering.',
-    prevention: 'Space plants for good air circulation. Water at the base. Apply preventative fungicide.'
+    prevention: 'Space plants for good air circulation. Water at the base. Apply preventative fungicide.',
+    medicineImage: 'https://images.unsplash.com/photo-1461749280684-dccba630e2f6'
   },
   'early_blight': {
     name: 'Early Blight',
     description: 'Fungal disease causing dark spots with concentric rings on lower leaves first.',
     treatment: 'Apply fungicide labeled for early blight. Remove infected leaves. Ensure good nutrition.',
-    prevention: 'Rotate crops. Mulch around base. Provide adequate spacing. Use resistant varieties.'
+    prevention: 'Rotate crops. Mulch around base. Provide adequate spacing. Use resistant varieties.',
+    medicineImage: 'https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d'
   },
   'late_blight': {
     name: 'Late Blight',
     description: 'Water-soaked lesions that rapidly enlarge and turn brown with white fungal growth.',
     treatment: 'Apply copper-based fungicide or specific late blight fungicide. Remove infected plants.',
-    prevention: 'Plant resistant varieties. Avoid overhead irrigation. Ensure good air circulation.'
+    prevention: 'Plant resistant varieties. Avoid overhead irrigation. Ensure good air circulation.',
+    medicineImage: 'https://images.unsplash.com/photo-1488590528505-98d2b5aba04b'
   },
   'powdery_mildew': {
     name: 'Powdery Mildew',
     description: 'White powdery growth on leaves, stems and sometimes fruit.',
     treatment: 'Apply sulfur-based fungicide or neem oil. Prune infected areas.',
-    prevention: 'Provide good air circulation. Plant resistant varieties. Avoid excess nitrogen.'
+    prevention: 'Provide good air circulation. Plant resistant varieties. Avoid excess nitrogen.',
+    medicineImage: 'https://images.unsplash.com/photo-1649972904349-6e44c42644a7'
   }
 };
 
@@ -73,7 +77,6 @@ const PlantDiseaseScanner: React.FC = () => {
       video.srcObject = stream;
       video.play();
 
-      // Take a snapshot after 1 second
       setTimeout(() => {
         const canvas = document.createElement('canvas');
         canvas.width = video.videoWidth;
@@ -81,12 +84,10 @@ const PlantDiseaseScanner: React.FC = () => {
         const ctx = canvas.getContext('2d');
         ctx?.drawImage(video, 0, 0, canvas.width, canvas.height);
         
-        // Convert to data URL and set as image
         const dataUrl = canvas.toDataURL('image/jpeg');
         setImage(dataUrl);
         setDetectedDisease(null);
         
-        // Stop all video tracks
         stream.getTracks().forEach(track => track.stop());
       }, 1000);
     } catch (error) {
@@ -104,16 +105,14 @@ const PlantDiseaseScanner: React.FC = () => {
     
     setIsScanning(true);
     
-    // Simulate AI processing delay
     setTimeout(() => {
-      // For demo purposes, randomly select a disease from our database
       const diseases = Object.keys(plantDiseaseDatabase);
       const randomDisease = diseases[Math.floor(Math.random() * diseases.length)];
       const selected = plantDiseaseDatabase[randomDisease];
       
       setDetectedDisease({
         ...selected,
-        confidence: Math.round((0.7 + Math.random() * 0.25) * 100) / 100 // Random confidence between 70-95%
+        confidence: Math.round((0.7 + Math.random() * 0.25) * 100) / 100
       });
       
       setIsScanning(false);
@@ -206,12 +205,23 @@ const PlantDiseaseScanner: React.FC = () => {
             </CardHeader>
             <CardContent>
               {detectedDisease ? (
-                <div className="space-y-4">
+                <div className="space-y-6">
                   <div className="flex items-center justify-between">
                     <h3 className="text-xl font-semibold text-primary">{detectedDisease.name}</h3>
                     <span className="text-sm bg-primary/10 text-primary px-2 py-1 rounded-full">
                       {Math.round(detectedDisease.confidence * 100)}% confidence
                     </span>
+                  </div>
+                  
+                  <div className="bg-muted/30 rounded-lg p-3">
+                    <h4 className="font-medium mb-2">Recommended Medicine</h4>
+                    <div className="flex justify-center">
+                      <img 
+                        src={detectedDisease.medicineImage} 
+                        alt={`Medicine for ${detectedDisease.name}`} 
+                        className="w-full max-w-xs h-auto rounded-md shadow-md"
+                      />
+                    </div>
                   </div>
                   
                   <div>
