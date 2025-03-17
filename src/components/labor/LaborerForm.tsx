@@ -5,8 +5,8 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { useToast } from '@/hooks/use-toast';
 import { UserCheck, ArrowLeft } from 'lucide-react';
+import { Laborer } from '@/pages/LaborManagement';
 
 interface WorkingSummary {
   daily: string;
@@ -16,21 +16,12 @@ interface WorkingSummary {
 
 interface LaborerFormProps {
   onCancel: () => void;
-  laborer?: {
-    id: string;
-    name: string;
-    phone: string;
-    specialization: string;
-    workingDays: string;
-    wageRate: number;
-    address?: string;
-    workingSummary?: WorkingSummary;
-    notes?: string;
-  };
+  onAddLaborer?: (laborer: Omit<Laborer, 'id'>) => void;
+  onUpdateLaborer?: (laborer: Laborer) => void;
+  laborer?: Laborer;
 }
 
-const LaborerForm = ({ onCancel, laborer }: LaborerFormProps) => {
-  const { toast } = useToast();
+const LaborerForm = ({ onCancel, onAddLaborer, onUpdateLaborer, laborer }: LaborerFormProps) => {
   const [formData, setFormData] = useState({
     name: laborer?.name || '',
     phone: laborer?.phone || '',
@@ -71,25 +62,33 @@ const LaborerForm = ({ onCancel, laborer }: LaborerFormProps) => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     
-    // Validation
-    if (!formData.name || !formData.phone || !formData.wageRate) {
-      toast({
-        title: "Validation Error",
-        description: "Please fill in all required fields.",
-        variant: "destructive",
+    // Create the laborer object from form data
+    const laborerData = {
+      name: formData.name,
+      phone: formData.phone,
+      specialization: formData.specialization,
+      workingDays: formData.workingDays,
+      wageRate: Number(formData.wageRate),
+      address: formData.address,
+      workingSummary: {
+        daily: formData.workingSummary.daily,
+        monthly: formData.workingSummary.monthly,
+        yearly: formData.workingSummary.yearly,
+      },
+      notes: formData.notes,
+    };
+    
+    // If editing an existing laborer
+    if (laborer && onUpdateLaborer) {
+      onUpdateLaborer({
+        ...laborerData,
+        id: laborer.id,
       });
-      return;
+    } 
+    // If adding a new laborer
+    else if (onAddLaborer) {
+      onAddLaborer(laborerData);
     }
-    
-    // In a real application, you would save this data to your database
-    console.log("Saving laborer data:", formData);
-    
-    toast({
-      title: laborer ? "Laborer Updated" : "Laborer Added",
-      description: `${formData.name} has been ${laborer ? 'updated' : 'added'} successfully.`,
-    });
-    
-    onCancel(); // Return to list view
   };
 
   return (

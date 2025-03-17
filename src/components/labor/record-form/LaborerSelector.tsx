@@ -2,14 +2,15 @@
 import React from 'react';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { SAMPLE_LABORERS } from '../utils/formUtils';
+import { Laborer } from '@/pages/LaborManagement';
 
 interface LaborerSelectorProps {
   laborerId: string;
   onSelectChange: (name: string, value: string) => void;
+  laborers: Laborer[];
 }
 
-const LaborerSelector = ({ laborerId, onSelectChange }: LaborerSelectorProps) => {
+const LaborerSelector = ({ laborerId, onSelectChange, laborers }: LaborerSelectorProps) => {
   return (
     <div className="space-y-2">
       <Label htmlFor="laborerId">Select Laborer <span className="text-red-500">*</span></Label>
@@ -22,7 +23,7 @@ const LaborerSelector = ({ laborerId, onSelectChange }: LaborerSelectorProps) =>
           <SelectValue placeholder="Select a laborer" />
         </SelectTrigger>
         <SelectContent>
-          {SAMPLE_LABORERS.map(laborer => (
+          {laborers.map(laborer => (
             <SelectItem key={laborer.id} value={laborer.id}>
               {laborer.name} (₹{laborer.wageRate}/day)
             </SelectItem>

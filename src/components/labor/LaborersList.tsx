@@ -15,79 +15,17 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 import { Card, CardContent } from '@/components/ui/card';
-
-// Enhanced laborer data structure
-const SAMPLE_LABORERS = [
-  { 
-    id: '1', 
-    name: 'Amit Kumar', 
-    phone: '9876543210', 
-    specialization: 'Harvesting', 
-    workingDays: 'Monday to Saturday', 
-    wageRate: 350,
-    address: 'Village Raipur, District Bhopal',
-    workingSummary: {
-      daily: '8 hours',
-      monthly: '26 days',
-      yearly: '300 days'
-    },
-    notes: 'Experienced in rice and wheat harvesting. Has own tools.'
-  },
-  { 
-    id: '2', 
-    name: 'Priya Singh', 
-    phone: '9876543211', 
-    specialization: 'Sowing', 
-    workingDays: 'Monday to Friday', 
-    wageRate: 330,
-    address: 'Village Gandhigram, District Indore',
-    workingSummary: {
-      daily: '7 hours',
-      monthly: '22 days',
-      yearly: '260 days'
-    },
-    notes: 'Skilled in traditional and modern sowing techniques.'
-  },
-  { 
-    id: '3', 
-    name: 'Rajesh Verma', 
-    phone: '9876543212', 
-    specialization: 'Irrigation', 
-    workingDays: 'All Days', 
-    wageRate: 380,
-    address: 'Village Khandwa, District Khandwa',
-    workingSummary: {
-      daily: '9 hours',
-      monthly: '30 days',
-      yearly: '340 days'
-    },
-    notes: 'Expert in drip irrigation systems and water management.'
-  },
-  { 
-    id: '4', 
-    name: 'Sunita Devi', 
-    phone: '9876543213', 
-    specialization: 'General', 
-    workingDays: 'Monday, Wednesday, Friday', 
-    wageRate: 320,
-    address: 'Village Bamori, District Gwalior',
-    workingSummary: {
-      daily: '6 hours',
-      monthly: '12 days',
-      yearly: '150 days'
-    },
-    notes: 'Prefers part-time work. Very reliable and punctual.'
-  },
-];
+import { Laborer } from '@/pages/LaborManagement';
 
 interface LaborersListProps {
+  laborers: Laborer[];
   onAddNew: () => void;
   onEdit: (id: string) => void;
+  onDelete: (id: string) => void;
 }
 
-const LaborersList = ({ onAddNew, onEdit }: LaborersListProps) => {
+const LaborersList = ({ laborers, onAddNew, onEdit, onDelete }: LaborersListProps) => {
   const [searchTerm, setSearchTerm] = useState('');
-  const [laborers, setLaborers] = useState(SAMPLE_LABORERS);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [laborerToDelete, setLaborerToDelete] = useState<string | null>(null);
   const [selectedLaborer, setSelectedLaborer] = useState<string | null>(null);
@@ -105,7 +43,7 @@ const LaborersList = ({ onAddNew, onEdit }: LaborersListProps) => {
   
   const confirmDelete = () => {
     if (laborerToDelete) {
-      setLaborers(laborers.filter(l => l.id !== laborerToDelete));
+      onDelete(laborerToDelete);
       setLaborerToDelete(null);
       setDeleteDialogOpen(false);
       // Clear selection if the deleted laborer was selected
@@ -204,21 +142,21 @@ const LaborersList = ({ onAddNew, onEdit }: LaborersListProps) => {
                                       <Clock className="h-4 w-4 text-muted-foreground" />
                                     </div>
                                     <p className="text-xs text-muted-foreground">Daily</p>
-                                    <p className="font-medium">{laborer.workingSummary.daily}</p>
+                                    <p className="font-medium">{laborer.workingSummary?.daily}</p>
                                   </div>
                                   <div className="bg-background rounded p-2 text-center">
                                     <div className="flex justify-center items-center mb-1">
                                       <Calendar className="h-4 w-4 text-muted-foreground" />
                                     </div>
                                     <p className="text-xs text-muted-foreground">Monthly</p>
-                                    <p className="font-medium">{laborer.workingSummary.monthly}</p>
+                                    <p className="font-medium">{laborer.workingSummary?.monthly}</p>
                                   </div>
                                   <div className="bg-background rounded p-2 text-center">
                                     <div className="flex justify-center items-center mb-1">
                                       <Calendar className="h-4 w-4 text-muted-foreground" />
                                     </div>
                                     <p className="text-xs text-muted-foreground">Yearly</p>
-                                    <p className="font-medium">{laborer.workingSummary.yearly}</p>
+                                    <p className="font-medium">{laborer.workingSummary?.yearly}</p>
                                   </div>
                                 </div>
                               </div>

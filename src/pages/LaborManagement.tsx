@@ -9,6 +9,7 @@ import LaborerForm from '@/components/labor/LaborerForm';
 import LaborRecords from '@/components/labor/LaborRecords';
 import RecordForm from '@/components/labor/RecordForm';
 import { ClipboardList, Users } from 'lucide-react';
+import { useToast } from '@/hooks/use-toast';
 
 // Define the state interface properly with editLaborerId
 interface LaborManagementState {
@@ -18,8 +19,25 @@ interface LaborManagementState {
   editRecordId?: string;
 }
 
+// Define the laborer interface
+export interface Laborer {
+  id: string;
+  name: string;
+  phone: string;
+  specialization: string;
+  workingDays: string;
+  wageRate: number;
+  address?: string;
+  workingSummary?: {
+    daily: string;
+    monthly: string;
+    yearly: string;
+  };
+  notes?: string;
+}
+
 // Sample data for laborers
-export const SAMPLE_LABORERS = [
+export const SAMPLE_LABORERS: Laborer[] = [
   { 
     id: '1', 
     name: 'Amit Kumar', 
@@ -83,11 +101,56 @@ export const SAMPLE_LABORERS = [
 ];
 
 const LaborManagement = () => {
+  const { toast } = useToast();
   // State for tracking active view in each tab
   const [activeView, setActiveView] = useState<LaborManagementState>({
     laborers: 'list', // 'list', 'add', or 'edit'
     records: 'list',  // 'list', 'add', or 'edit'
   });
+  
+  // State for storing the laborers data
+  const [laborers, setLaborers] = useState<Laborer[]>(SAMPLE_LABORERS);
+
+  // Function to handle adding a new laborer
+  const handleAddLaborer = (laborer: Omit<Laborer, 'id'>) => {
+    // Generate a unique ID (in a real app, this would come from the backend)
+    const newId = (laborers.length + 1).toString();
+    const newLaborer = { ...laborer, id: newId };
+    
+    setLaborers([...laborers, newLaborer]);
+    setActiveView({...activeView, laborers: 'list'});
+    
+    toast({
+      title: "Laborer Added",
+      description: `${laborer.name} has been added successfully.`,
+    });
+  };
+
+  // Function to handle updating an existing laborer
+  const handleUpdateLaborer = (updatedLaborer: Laborer) => {
+    const updatedLaborers = laborers.map(lab => 
+      lab.id === updatedLaborer.id ? updatedLaborer : lab
+    );
+    
+    setLaborers(updatedLaborers);
+    setActiveView({...activeView, laborers: 'list'});
+    
+    toast({
+      title: "Laborer Updated",
+      description: `${updatedLaborer.name} has been updated successfully.`,
+    });
+  };
+
+  // Function to handle deleting a laborer
+  const handleDeleteLaborer = (laborerId: string) => {
+    const updatedLaborers = laborers.filter(lab => lab.id !== laborerId);
+    setLaborers(updatedLaborers);
+    
+    toast({
+      title: "Laborer Deleted",
+      description: "The laborer has been deleted successfully.",
+    });
+  };
 
   return (
     <div className="min-h-screen flex flex-col">
@@ -121,15 +184,19 @@ const LaborManagement = () => {
                   <CardContent>
                     {activeView.laborers === 'list' ? (
                       <LaborersList 
+                        laborers={laborers}
                         onAddNew={() => setActiveView({...activeView, laborers: 'add'})}
                         onEdit={(laborerId) => setActiveView({...activeView, laborers: 'edit', editLaborerId: laborerId})}
+                        onDelete={handleDeleteLaborer}
                       />
                     ) : (
                       <LaborerForm 
                         onCancel={() => setActiveView({...activeView, laborers: 'list'})}
+                        onAddLaborer={handleAddLaborer}
+                        onUpdateLaborer={handleUpdateLaborer}
                         laborer={activeView.editLaborerId ? 
                           // Find the laborer with the matching ID in the data
-                          SAMPLE_LABORERS.find(l => l.id === activeView.editLaborerId) 
+                          laborers.find(l => l.id === activeView.editLaborerId) 
                           : undefined} 
                       />
                     )}
@@ -150,10 +217,12 @@ const LaborManagement = () => {
                       <LaborRecords 
                         onAddNew={() => setActiveView({...activeView, records: 'add'})}
                         onEdit={(recordId) => setActiveView({...activeView, records: 'edit', editRecordId: recordId})}
+                        laborers={laborers}
                       />
                     ) : (
                       <RecordForm 
                         onCancel={() => setActiveView({...activeView, records: 'list'})}
+                        laborers={laborers}
                         record={activeView.editRecordId ? 
                           // Find the record with the matching ID in your data
                           undefined : undefined} 
