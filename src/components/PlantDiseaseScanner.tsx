@@ -19,35 +19,35 @@ const plantDiseaseDatabase: Record<string, Omit<DetectedDisease, 'confidence'>> 
     description: 'A fungal disease that causes dark, scabby lesions on leaves and fruit.',
     treatment: 'Apply fungicide specifically labeled for apple scab. Remove and destroy infected leaves and fruit.',
     prevention: 'Plant resistant varieties. Improve air circulation by pruning. Apply preventative fungicide sprays.',
-    medicineImage: 'https://images.unsplash.com/photo-1518770660439-4636190af475'
+    medicineImage: 'https://images.unsplash.com/photo-1581090464777-f3220bbe1b8b'
   },
   'black_spot': {
     name: 'Black Spot',
     description: 'Causes black spots with fringed margins on leaves, which may yellow and drop.',
     treatment: 'Apply fungicide. Remove and destroy infected leaves. Avoid overhead watering.',
     prevention: 'Space plants for good air circulation. Water at the base. Apply preventative fungicide.',
-    medicineImage: 'https://images.unsplash.com/photo-1461749280684-dccba630e2f6'
+    medicineImage: 'https://images.unsplash.com/photo-1581090464777-f3220bbe1b8b'
   },
   'early_blight': {
     name: 'Early Blight',
     description: 'Fungal disease causing dark spots with concentric rings on lower leaves first.',
     treatment: 'Apply fungicide labeled for early blight. Remove infected leaves. Ensure good nutrition.',
     prevention: 'Rotate crops. Mulch around base. Provide adequate spacing. Use resistant varieties.',
-    medicineImage: 'https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d'
+    medicineImage: 'https://images.unsplash.com/photo-1581090464777-f3220bbe1b8b'
   },
   'late_blight': {
     name: 'Late Blight',
     description: 'Water-soaked lesions that rapidly enlarge and turn brown with white fungal growth.',
     treatment: 'Apply copper-based fungicide or specific late blight fungicide. Remove infected plants.',
     prevention: 'Plant resistant varieties. Avoid overhead irrigation. Ensure good air circulation.',
-    medicineImage: 'https://images.unsplash.com/photo-1488590528505-98d2b5aba04b'
+    medicineImage: 'https://images.unsplash.com/photo-1581090464777-f3220bbe1b8b'
   },
   'powdery_mildew': {
     name: 'Powdery Mildew',
     description: 'White powdery growth on leaves, stems and sometimes fruit.',
     treatment: 'Apply sulfur-based fungicide or neem oil. Prune infected areas.',
     prevention: 'Provide good air circulation. Plant resistant varieties. Avoid excess nitrogen.',
-    medicineImage: 'https://images.unsplash.com/photo-1649972904349-6e44c42644a7'
+    medicineImage: 'https://images.unsplash.com/photo-1581090464777-f3220bbe1b8b'
   }
 };
 
