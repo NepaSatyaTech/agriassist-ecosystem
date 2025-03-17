@@ -11,18 +11,19 @@ import WorkPaymentInputs from './record-form/WorkPaymentInputs';
 import NotesInput from './record-form/NotesInput';
 import FormActions from './record-form/FormActions';
 import { 
-  SAMPLE_LABORERS,
   initializeFormData,
   RecordFormData,
   RecordType
 } from './utils/formUtils';
+import { Laborer } from '@/pages/LaborManagement';
 
 interface RecordFormProps {
   onCancel: () => void;
   record?: RecordType;
+  laborers: Laborer[];
 }
 
-const RecordForm = ({ onCancel, record }: RecordFormProps) => {
+const RecordForm = ({ onCancel, record, laborers }: RecordFormProps) => {
   const { toast } = useToast();
   const [formData, setFormData] = useState<RecordFormData>(initializeFormData(record));
   
@@ -46,7 +47,7 @@ const RecordForm = ({ onCancel, record }: RecordFormProps) => {
     
     // Set default wage when selecting a laborer
     if (name === 'laborerId') {
-      const laborer = SAMPLE_LABORERS.find(l => l.id === value);
+      const laborer = laborers.find(l => l.id === value);
       if (laborer) {
         setFormData(prev => ({ 
           ...prev, 
@@ -94,7 +95,8 @@ const RecordForm = ({ onCancel, record }: RecordFormProps) => {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <LaborerSelector 
             laborerId={formData.laborerId} 
-            onSelectChange={handleSelectChange} 
+            onSelectChange={handleSelectChange}
+            laborers={laborers}
           />
           <DateSelector 
             date={formData.date}

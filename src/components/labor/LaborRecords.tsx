@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -16,6 +15,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
+import { Laborer } from '@/pages/LaborManagement';
 
 // Sample data - in a real app this would come from your database
 const SAMPLE_RECORDS = [
@@ -76,9 +76,10 @@ const SAMPLE_RECORDS = [
 interface LaborRecordsProps {
   onAddNew: () => void;
   onEdit?: (id: string) => void;
+  laborers: Laborer[];
 }
 
-const LaborRecords = ({ onAddNew, onEdit }: LaborRecordsProps) => {
+const LaborRecords = ({ onAddNew, onEdit, laborers }: LaborRecordsProps) => {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedSeason, setSelectedSeason] = useState('');
   const [selectedMonth, setSelectedMonth] = useState('');
@@ -86,7 +87,6 @@ const LaborRecords = ({ onAddNew, onEdit }: LaborRecordsProps) => {
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [recordToDelete, setRecordToDelete] = useState<string | null>(null);
   
-  // Filter records based on search term and dropdown selections
   const filteredRecords = records.filter(record => {
     const matchesSearch = 
       record.laborerName.toLowerCase().includes(searchTerm.toLowerCase()) ||
