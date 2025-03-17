@@ -213,17 +213,6 @@ const PlantDiseaseScanner: React.FC = () => {
                     </span>
                   </div>
                   
-                  <div className="bg-muted/30 rounded-lg p-3">
-                    <h4 className="font-medium mb-2">Recommended Medicine</h4>
-                    <div className="flex justify-center">
-                      <img 
-                        src={detectedDisease.medicineImage} 
-                        alt={`Medicine for ${detectedDisease.name}`} 
-                        className="w-full max-w-xs h-auto rounded-md shadow-md"
-                      />
-                    </div>
-                  </div>
-                  
                   <div>
                     <h4 className="font-medium mb-1">Description</h4>
                     <p className="text-sm text-gray-600 dark:text-gray-300">{detectedDisease.description}</p>
