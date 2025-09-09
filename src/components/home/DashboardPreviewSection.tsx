@@ -5,6 +5,7 @@ import ExpenseChart from '@/components/ExpenseChart';
 import SeedRecommendation from '@/components/SeedRecommendation';
 import IoTSensorCard from '@/components/IoTSensorCard';
 import { Button } from '@/components/ui/button';
+import farmingDashboard from '@/assets/farming-dashboard.jpg';
 
 interface DashboardPreviewSectionProps {
   weatherData: {
@@ -45,8 +46,17 @@ interface DashboardPreviewSectionProps {
 
 const DashboardPreviewSection = ({ weatherData, sensorData, seedData }: DashboardPreviewSectionProps) => {
   return (
-    <section className="py-24 bg-green-50 dark:bg-green-950/10">
-      <div className="container mx-auto px-4">
+    <section className="py-24 bg-green-50 dark:bg-green-950/10 relative overflow-hidden">
+      {/* Background image */}
+      <div className="absolute inset-0 opacity-5 dark:opacity-10">
+        <img 
+          src={farmingDashboard} 
+          alt="" 
+          className="w-full h-full object-cover"
+        />
+      </div>
+      
+      <div className="container mx-auto px-4 relative z-10">
         <div className="text-center max-w-3xl mx-auto mb-16">
           <div className="inline-block bg-green-100 dark:bg-green-900/30 rounded-full px-3 py-1 text-sm font-medium text-green-800 dark:text-green-300 mb-3">
             Live Dashboard

@@ -2,9 +2,23 @@
 import React, { useEffect, useRef } from 'react';
 import { ArrowRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { useNavigate } from 'react-router-dom';
+import smartFarmingHero from '@/assets/smart-farming-hero.jpg';
 
 const Hero = () => {
   const containerRef = useRef<HTMLDivElement>(null);
+  const navigate = useNavigate();
+
+  const handleGetStarted = () => {
+    navigate('/auth/register');
+  };
+
+  const handleExploreFeatures = () => {
+    const featuresSection = document.getElementById('features-section');
+    if (featuresSection) {
+      featuresSection.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
 
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
@@ -78,11 +92,11 @@ const Hero = () => {
               AI-powered recommendations, real-time monitoring, and data-driven insights.
             </p>
             <div className="flex flex-wrap gap-4 pt-2">
-              <Button size="lg" className="group">
+              <Button size="lg" className="group" onClick={handleGetStarted}>
                 Get Started 
                 <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
               </Button>
-              <Button size="lg" variant="outline">
+              <Button size="lg" variant="outline" onClick={handleExploreFeatures}>
                 Explore Features
               </Button>
             </div>
@@ -92,8 +106,8 @@ const Hero = () => {
               <div className="absolute inset-0 rounded-2xl bg-gradient-to-tr from-green-600/20 to-sky-400/20 blur-xl"></div>
               <div className="glass-card p-1 overflow-hidden">
                 <img 
-                  src="https://images.unsplash.com/photo-1625246333195-78d73c5207fd?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80" 
-                  alt="Smart Farming"
+                  src={smartFarmingHero} 
+                  alt="Smart Farming Technology - IoT sensors and modern agricultural equipment in fields"
                   className="w-full h-auto rounded-xl transform transition-transform duration-500 hover:scale-105"
                 />
               </div>

@@ -15,7 +15,7 @@ import { Link } from 'react-router-dom';
 
 const FeaturesSection = () => {
   return (
-    <section className="py-24 bg-white dark:bg-gray-900">
+    <section id="features-section" className="py-24 bg-white dark:bg-gray-900">
       <div className="container mx-auto px-4">
         <div className="text-center max-w-3xl mx-auto mb-16">
           <div className="inline-block bg-green-100 dark:bg-green-900/30 rounded-full px-3 py-1 text-sm font-medium text-green-800 dark:text-green-300 mb-3">
