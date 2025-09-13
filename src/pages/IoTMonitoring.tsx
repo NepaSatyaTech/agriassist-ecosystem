@@ -1,14 +1,31 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import Navbar from '@/components/navbar';
 import Footer from '@/components/Footer';
 import IoTSensorCard from '@/components/IoTSensorCard';
+import AddSensorModal from '@/components/modals/AddSensorModal';
 import { Button } from '@/components/ui/button';
 import { Wifi, PlusCircle, RefreshCw } from 'lucide-react';
+import { toast } from '@/components/ui/use-toast';
+
+interface SensorData {
+  id: string;
+  name: string;
+  location: string;
+  type: 'moisture' | 'temperature' | 'humidity' | 'wind';
+  value: number;
+  unit: string;
+  timestamp: string;
+  batteryLevel: number;
+  signalStrength: number;
+  status: 'normal' | 'warning' | 'critical';
+}
 
 const IoTMonitoring = () => {
+  const [addSensorModalOpen, setAddSensorModalOpen] = useState(false);
+  
   // Sample sensor data
-  const sensorData = [
+  const [sensorData, setSensorData] = useState<SensorData[]>([
     {
       id: 'sensor-1',
       name: 'Soil Moisture Sensor',
@@ -105,7 +122,32 @@ const IoTMonitoring = () => {
       signalStrength: 89,
       status: 'normal' as const,
     }
-  ];
+  ]);
+
+  const handleAddSensor = (newSensor: SensorData) => {
+    setSensorData(prev => [...prev, newSensor]);
+    toast({
+      title: "Sensor Added Successfully",
+      description: `${newSensor.name} has been added to your IoT monitoring system.`,
+    });
+  };
+
+  const handleRefreshData = () => {
+    // Simulate refreshing sensor data
+    setSensorData(prev => prev.map(sensor => ({
+      ...sensor,
+      timestamp: new Date().toISOString(),
+      // Simulate small changes in values
+      value: sensor.type === 'temperature' 
+        ? Math.max(0, sensor.value + (Math.random() - 0.5) * 2)
+        : Math.max(0, sensor.value + (Math.random() - 0.5) * 5),
+    })));
+    
+    toast({
+      title: "Data Refreshed",
+      description: "All sensor readings have been updated with the latest values.",
+    });
+  };
 
   return (
     <div className="min-h-screen flex flex-col">
@@ -129,10 +171,10 @@ const IoTMonitoring = () => {
             <div className="flex flex-col md:flex-row justify-between items-center mb-8">
               <h2 className="text-2xl font-bold mb-4 md:mb-0">Sensor Dashboard</h2>
               <div className="flex gap-3">
-                <Button variant="outline" size="sm">
+                <Button variant="outline" size="sm" onClick={handleRefreshData}>
                   <RefreshCw className="mr-2 h-4 w-4" /> Refresh Data
                 </Button>
-                <Button size="sm">
+                <Button size="sm" onClick={() => setAddSensorModalOpen(true)}>
                   <PlusCircle className="mr-2 h-4 w-4" /> Add New Sensor
                 </Button>
               </div>
@@ -229,6 +271,12 @@ const IoTMonitoring = () => {
       </main>
       
       <Footer />
+      
+      <AddSensorModal 
+        open={addSensorModalOpen}
+        onOpenChange={setAddSensorModalOpen}
+        onAddSensor={handleAddSensor}
+      />
     </div>
   );
 };
