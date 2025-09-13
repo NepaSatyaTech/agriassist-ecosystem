@@ -1,23 +1,24 @@
 
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { ArrowRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useNavigate } from 'react-router-dom';
 import smartFarmingHero from '@/assets/smart-farming-hero.jpg';
+import GetStartedModal from '@/components/modals/GetStartedModal';
+import ExploreFeaturesModal from '@/components/modals/ExploreFeaturesModal';
 
 const Hero = () => {
   const containerRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
+  const [getStartedModalOpen, setGetStartedModalOpen] = useState(false);
+  const [exploreFeaturesModalOpen, setExploreFeaturesModalOpen] = useState(false);
 
   const handleGetStarted = () => {
-    navigate('/auth/register');
+    setGetStartedModalOpen(true);
   };
 
   const handleExploreFeatures = () => {
-    const featuresSection = document.getElementById('features-section');
-    if (featuresSection) {
-      featuresSection.scrollIntoView({ behavior: 'smooth' });
-    }
+    setExploreFeaturesModalOpen(true);
   };
 
   useEffect(() => {
@@ -129,6 +130,16 @@ const Hero = () => {
           </div>
         </div>
       </div>
+
+      <GetStartedModal 
+        open={getStartedModalOpen} 
+        onOpenChange={setGetStartedModalOpen} 
+      />
+      
+      <ExploreFeaturesModal 
+        open={exploreFeaturesModalOpen} 
+        onOpenChange={setExploreFeaturesModalOpen} 
+      />
     </div>
   );
 };

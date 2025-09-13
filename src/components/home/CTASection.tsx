@@ -1,14 +1,16 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { ArrowRight } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import GetStartedModal from '@/components/modals/GetStartedModal';
 
 const CTASection = () => {
   const navigate = useNavigate();
+  const [getStartedModalOpen, setGetStartedModalOpen] = useState(false);
 
   const handleGetStarted = () => {
-    navigate('/auth/register');
+    setGetStartedModalOpen(true);
   };
 
   const handleExploreFeatures = () => {
@@ -34,6 +36,11 @@ const CTASection = () => {
           </Button>
         </div>
       </div>
+
+      <GetStartedModal 
+        open={getStartedModalOpen} 
+        onOpenChange={setGetStartedModalOpen} 
+      />
     </section>
   );
 };
