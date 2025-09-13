@@ -276,12 +276,95 @@ const SeedGuide = () => {
               </TabsContent>
               
               <TabsContent value="catalog">
-                <div className="bg-gray-50 dark:bg-gray-800/50 rounded-lg p-8 text-center">
-                  <h3 className="text-xl font-medium mb-4">Full Seed Catalog</h3>
-                  <p className="text-gray-600 dark:text-gray-300 mb-6">
-                    Our complete seed catalog contains over 500 varieties of seeds for all types of crops.
-                  </p>
-                  <Button>Browse Full Catalog</Button>
+                <div className="space-y-8">
+                  <div className="text-center mb-8">
+                    <h3 className="text-2xl font-bold mb-2">🌱 Full Catalog – Seed Guide</h3>
+                    <p className="text-muted-foreground">Complete collection of seeds for all your farming needs</p>
+                  </div>
+                  
+                  {/* Vegetables Section */}
+                  <div className="glass-card p-6">
+                    <h4 className="text-xl font-semibold mb-6 text-green-600 dark:text-green-400">1. Vegetables</h4>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                      <div className="border rounded-lg p-4 bg-background/50">
+                        <h5 className="font-medium text-lg mb-2">Tomato (Hybrid Red King)</h5>
+                        <p className="text-sm text-muted-foreground mb-3">High-yield hybrid variety with firm, bright red fruits.</p>
+                        <div className="space-y-1 text-sm">
+                          <div><span className="font-medium">Growth Duration:</span> 70–80 days</div>
+                          <div><span className="font-medium">Climate/Soil:</span> Well-drained loamy soil, warm climate</div>
+                          <div><span className="font-medium">Yield Potential:</span> 25–30 tons/acre</div>
+                          <div><span className="font-medium">Care Tips:</span> Requires staking; regular watering needed</div>
+                        </div>
+                      </div>
+                      
+                      <div className="border rounded-lg p-4 bg-background/50">
+                        <h5 className="font-medium text-lg mb-2">Spinach (Green Glory)</h5>
+                        <p className="text-sm text-muted-foreground mb-3">Fast-growing leafy vegetable, rich in iron.</p>
+                        <div className="space-y-1 text-sm">
+                          <div><span className="font-medium">Growth Duration:</span> 35–40 days</div>
+                          <div><span className="font-medium">Climate/Soil:</span> Prefers cool climate, moist sandy-loam soil</div>
+                          <div><span className="font-medium">Yield Potential:</span> 10–12 tons/acre</div>
+                          <div><span className="font-medium">Care Tips:</span> Continuous harvesting possible by cutting outer leaves</div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  {/* Fruits Section */}
+                  <div className="glass-card p-6">
+                    <h4 className="text-xl font-semibold mb-6 text-orange-600 dark:text-orange-400">2. Fruits</h4>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                      <div className="border rounded-lg p-4 bg-background/50">
+                        <h5 className="font-medium text-lg mb-2">Watermelon (Sugar Star)</h5>
+                        <p className="text-sm text-muted-foreground mb-3">Sweet, large-sized fruits with bright red flesh.</p>
+                        <div className="space-y-1 text-sm">
+                          <div><span className="font-medium">Growth Duration:</span> 90–100 days</div>
+                          <div><span className="font-medium">Climate/Soil:</span> Hot climate, sandy-loam soil with good drainage</div>
+                          <div><span className="font-medium">Yield Potential:</span> 30–35 tons/acre</div>
+                          <div><span className="font-medium">Care Tips:</span> Requires full sun; avoid waterlogging</div>
+                        </div>
+                      </div>
+                      
+                      <div className="border rounded-lg p-4 bg-background/50">
+                        <h5 className="font-medium text-lg mb-2">Papaya (Golden Sunrise)</h5>
+                        <p className="text-sm text-muted-foreground mb-3">Medium-height variety with yellow-orange pulp, good for table use.</p>
+                        <div className="space-y-1 text-sm">
+                          <div><span className="font-medium">Growth Duration:</span> 9–11 months for fruiting</div>
+                          <div><span className="font-medium">Climate/Soil:</span> Tropical climate, well-drained sandy loam soil</div>
+                          <div><span className="font-medium">Yield Potential:</span> 40–60 kg per plant annually</div>
+                          <div><span className="font-medium">Care Tips:</span> Protect from frost; irrigation at regular intervals</div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  {/* Flowers Section */}
+                  <div className="glass-card p-6">
+                    <h4 className="text-xl font-semibold mb-6 text-pink-600 dark:text-pink-400">3. Flowers</h4>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                      <div className="border rounded-lg p-4 bg-background/50">
+                        <h5 className="font-medium text-lg mb-2">Marigold (Orange Delight)</h5>
+                        <p className="text-sm text-muted-foreground mb-3">Popular ornamental flower with bright orange blooms.</p>
+                        <div className="space-y-1 text-sm">
+                          <div><span className="font-medium">Growth Duration:</span> 60–70 days</div>
+                          <div><span className="font-medium">Climate/Soil:</span> Grows well in sandy-loam soil; moderate climate</div>
+                          <div><span className="font-medium">Yield Potential:</span> 12–15 tons of flowers/acre</div>
+                          <div><span className="font-medium">Care Tips:</span> Pinching improves branching and flower size</div>
+                        </div>
+                      </div>
+                      
+                      <div className="border rounded-lg p-4 bg-background/50">
+                        <h5 className="font-medium text-lg mb-2">Sunflower (Golden Shine)</h5>
+                        <p className="text-sm text-muted-foreground mb-3">Large, bright yellow flowers, also grown for seeds.</p>
+                        <div className="space-y-1 text-sm">
+                          <div><span className="font-medium">Growth Duration:</span> 90–100 days</div>
+                          <div><span className="font-medium">Climate/Soil:</span> Warm climate, fertile loam soil with good drainage</div>
+                          <div><span className="font-medium">Yield Potential:</span> 8–10 quintals seeds/acre</div>
+                          <div><span className="font-medium">Care Tips:</span> Ensure spacing for large flower heads</div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </TabsContent>
             </Tabs>
