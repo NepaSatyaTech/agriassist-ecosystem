@@ -6,6 +6,8 @@ import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 import { Button } from '@/components/ui/button';
 import { BarChart3, Download, PieChart, TrendingUp, DollarSign } from 'lucide-react';
 import ExpenseChart from '@/components/ExpenseChart';
+import RevenueTab from '@/components/RevenueTab';
+import ReportsTab from '@/components/ReportsTab';
 
 const ExpenseTracker = () => {
   return (
@@ -153,17 +155,11 @@ const ExpenseTracker = () => {
                 </TabsContent>
                 
                 <TabsContent value="revenue">
-                  <div className="text-center py-12 bg-gray-50 dark:bg-gray-800/50 rounded-lg">
-                    <p className="text-gray-500 dark:text-gray-400 mb-4">Revenue tracking feature will be available in the next update.</p>
-                    <Button>Try Expense Tracking</Button>
-                  </div>
+                  <RevenueTab />
                 </TabsContent>
                 
                 <TabsContent value="reports">
-                  <div className="text-center py-12 bg-gray-50 dark:bg-gray-800/50 rounded-lg">
-                    <p className="text-gray-500 dark:text-gray-400 mb-4">Advanced reporting features will be available in the next update.</p>
-                    <Button>Try Expense Tracking</Button>
-                  </div>
+                  <ReportsTab />
                 </TabsContent>
               </Tabs>
             </div>
